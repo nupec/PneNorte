@@ -9,7 +9,7 @@ url("https://sidra.ibge.gov.br/tabela/1552?fbclid=IwAR3PonnEhgVF1jdvbkyUnGCFvg2d
 
 ## A seguir, importa-se a tabela 1552 e corrige-se o tipo de variável
 ## "codigo_municipio" para o formato numérico.
-df <- readxl::read_excel("data/tabela1552_tidy.xlsx", sheet = 2) |>
+df <- readxl::read_excel("data-raw/tabela1552_tidy.xlsx", sheet = 2) |>
   dplyr::mutate(
     codigo_municipio = as.numeric(codigo_municipio)
   )
