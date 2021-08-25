@@ -1,4 +1,4 @@
-# PneNorte - Monitoramento das Metas do Plano Nacional de Educação nos Municípios da Região
+# PneNorte - Monitoramento das Metas do Plano Nacional de Educação nos Municípios da Região Norte
 
 ### Introdução
 A busca pela universalização do acesso à educação e da melhoria da qualidade de
