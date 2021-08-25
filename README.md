@@ -105,9 +105,9 @@ Silves e Urucurituba, que formam a microrregião de Itacoatiara, levando em cons
 importância de conhecer a realidade educacional desta microrregião e apresenta-la para a
 sociedade.
 
-# O Painel de Monitoramento do PNE pode ser acessado em:  <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/inep-data/painel-de-monitoramento-do-pne>
+O Painel de Monitoramento do PNE pode ser acessado em:  <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/inep-data/painel-de-monitoramento-do-pne>
 
-Objetivo Geral: 
+### Objetivo Geral: 
 
  Calcular a Meta 1 do PNE para a Microrregião de Itacoatiara, como base para o aprendizado
  que que permita, posteriormente, calcular todas as 20 metas, bem como seus inicadores.
