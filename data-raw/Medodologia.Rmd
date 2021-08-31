@@ -1,0 +1,252 @@
+---
+title: "Pipeline: Metodologia Meta 1"
+author: "Núcleo de Pesquisa em Ciência de Dados e Otimização"
+date: "31/08/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Etapa I: Importando a base de dados ---------------------------------------------
+
+Nesta etapa, importa-se a Tabela 1552, gerada pelo Sistema SIDRA/IBGE e que contém a contagem da popuçação desagregada por idade (CENSO - 2010). Link para a [tabela 1552]<(https://sidra.ibge.gov.br/tabela/1552?fbclid=IwAR3PonnEhgVF1jdvbkyUnGCFvg2dnogSyRLtnGqY6M65jJo7T0eou3DVsQ0#/n1/all/n3/all/n6/all/v/allxp/p/all/c1/0/c2/0/c286/0/c287/all/l/v,p+c1+c2,t+c286+c287/resultado)>
+
+A seguir, importa-se a tabela 1552 para o R e corrige-se o tipo de variável "codigo_municipio" para o formato numérico.
+
+```{r}
+library(readxl)
+
+df <- readxl::read_excel("../data-raw/tabela1552_tidy.xlsx", sheet = 2) |>
+  dplyr::mutate(codigo_municipio = as.numeric(codigo_municipio))
+
+```
+O script a seguir faz um cópia da coluna 1 do data frame que contém o código do muncípio, retira os NA´s, transforma o reesultado em um vetor e e depois replica o código de cada cidade 101 vezes. Ao final transforma os
+dados no formato de tibble.
+
+```{r}
+col1 <- df[1] |> 
+  tidyr::drop_na() |> 
+  dplyr::pull() |>
+  rep(101) |>
+  dplyr::as_tibble()
+
+```
+O mesmo processo é feito com as colunas 2 e 3
+
+```{r}
+
+col2 <- df[2] |> 
+  tidyr::drop_na() |> 
+  dplyr::pull() |>
+  rep(101) |>
+  dplyr::as_tibble()
+
+col3 <- df[3] |> 
+  tidyr::drop_na() |> 
+  dplyr::pull() |>
+  rep(101) |>
+  dplyr::as_tibble()
+
+```
+### Etapa II: Nesta etapa, as colunas 1, 2 e 3 são juntadas em um novo data frame (df2)
+
+```{r}
+df2 <- dplyr::bind_cols(col1, col2, col3) |>
+  dplyr::rename(codigo_municipio = value...1,
+                nome_municipio = value...2,
+                nome_uf = value...3)
+
+## Ordena-se os dados pela variável "codigo_municipio" e atualizo o df2
+df2 <- df2 |> dplyr::arrange(df2, "codigo_municipio")
+
+## Nesta etapa, junta-se os dados do df2 com df
+indices_tidy <- dplyr::bind_cols(df2, df[4:5])
+
+```
+### Etapa 3:  Importação dos índices da população brasileira por idade-----
+
+Importando as estimativas da população (2001 a 2020)
+
+```{r}
+
+populacao_municipios <- readxl::read_excel("../data-raw/popBrasilESTIMADA.xlsx")
+
+```
+Transformando a base importada no formato tidy
+
+```{r}
+populacao_municipios_tidy <- populacao_municipios |>
+  tidyr::pivot_longer(
+    cols = starts_with("20"),
+    names_to = "ano",
+    values_to = "populacao") |>
+  dplyr::mutate(
+    codigo_municipio = as.numeric(codigo_municipio)
+  )
+
+```
+EStimando a população desagregadas por idade
+
+```{r}
+pop_est_idade <- dplyr::left_join(populacao_municipios_tidy,
+                                  indices_tidy,
+                                  by="codigo_municipio")|>
+  dplyr::arrange(ano, idade) |>
+  dplyr::rename(nome_municipio = nome_municipio.x) |>
+  dplyr::mutate(populacao_estimada = ceiling(populacao*prop)) |>
+  dplyr::select(codigo_municipio, nome_municipio, ano, nome_uf,
+                idade, populacao_estimada)
+
+```
+
+### Etapa 4: Calculando os Indacadores 1B, 1B e a Meta 1
+
+```{r}
+brasil         <- readr::read_rds("../data-raw/Brasil_shp.rds")
+estados        <- readr::read_rds("../data-raw/Estados_shp.rds")
+municipios     <- readr::read_rds("../data-raw/Municipios_shp.rds")
+dados_idh_muni <- readr::read_rds("../data-raw/dados_idh_muni.rds")
+matriculaNorte <- readr::read_rds("../data-raw/matricula1320.rds")
+populacaoEst   <- readr::read_rds("../data/populacaoEstimadaPorIdade.rds")
+codMunicipios <- readxl::read_excel("../data-raw/CODIGO_MUNICIPIO.xls")
+
+```
+
+### Dicionário das bases
+
+* matriculaNorte: contém a matricula de todos os alunos, por estado, da região norte entre os anos de 2013 e 2020.
+
+*populacaoEst: contém a população estimada entre os anos de 2014 e 2020 das cidade da região norte, bem como a estimativa de 0 a 90+ anos.
+
+* cod_Municipios: contém todos os códigos das divisões territoriais brasileira,
+
+### Tratando os nomes das variáveis da base: MatriculaNorte
+
+```{r}
+matriculaNorte <- matriculaNorte |> 
+  janitor::clean_names() |>
+  dplyr::rename(ano = nu_ano_censo,
+                idade = nu_idade_referencia,
+                codigo_municipio = co_municipio)
+```
+
+### Tratando os nomes das variáveis da base: Código dos Municípios
+
+```{r}
+codMunicipios <- codMunicipios |> 
+  janitor::clean_names() |>
+  dplyr::rename(co_uf = uf,
+                codigo_municipio = codigo_municipio_completo) |>
+  dplyr::select(-municipio) |>
+  dplyr::mutate(
+    codigo_municipio = as.numeric(codigo_municipio)
+  )
+```
+
+### Matrículas da Educação Infantil por ano e municicipio entre os anos de 2020
+
+```{r}
+matriculaEduInf <- matriculaNorte |>
+  dplyr::filter(ano %in% "2014":"2020") |>
+  dplyr::filter(tp_etapa_ensino %in% "1":"2") |>
+  dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
+  dplyr::count(codigo_municipio) |>
+  dplyr::mutate(
+    joinTab = stringr::str_c(ano, codigo_municipio,
+                             sep = "_")
+  ) |> dplyr::rename(qtdeMat = n)
+
+```
+### Agrupando as matrículas por etapa de ensino:
+
+* Creche
+
+```{r}
+matriculaCrecheNorte <- matriculaEduInf |>
+  # Filtrando etapa 1 referente às matriculas em creche
+  dplyr::filter(tp_etapa_ensino == "1") |>
+  dplyr::rename(qtdeMatCreche = qtdeMat)
+```
+* Pré-Escola
+
+```{r}
+
+matriculaPreNorte <- matriculaEduInf |>
+  # Filtrando etapa 1 referente às matriculas em creche
+  dplyr::filter(tp_etapa_ensino == "2")|>
+  dplyr::rename(qtdeMatPre = qtdeMat)
+```
+
+### Agrupando as populações
+
+* Agrupando a população de 0 a 3 anos
+
+```{r}
+
+popCrecheEst <- populacaoEst |>
+  dplyr::filter(idade %in% c(0:3)) |>
+  dplyr::group_by(ano, codigo_municipio, nome_municipio) |>
+  dplyr::summarise(
+    popFaixa0a3 = sum(populacao_estimada)
+  ) |>
+  dplyr::group_by(codigo_municipio) |>
+  dplyr::mutate(
+    joinTab = stringr::str_c(ano, codigo_municipio,
+                             sep = "_")) |>
+  dplyr::relocate("joinTab",.after = "nome_municipio")
+
+```
+
+* Agrupando a população de 4 e 5 anos 
+
+```{r}
+popPreEst <- populacaoEst |>
+  dplyr::filter(idade %in% c(4:5)) |>
+  dplyr::group_by(ano, codigo_municipio, nome_municipio) |>
+  dplyr::summarise(
+    popFaixa4e5 = sum(populacao_estimada)
+  ) |>
+  dplyr::group_by(codigo_municipio) |>
+  dplyr::mutate(
+    joinTab = stringr::str_c(ano, codigo_municipio,
+                             sep = "_")) |>
+  dplyr::relocate("joinTab",.after = "nome_municipio")
+
+pop0a5 <- dplyr::left_join(popCrecheEst, popPreEst, by = "joinTab" ) |>
+  dplyr::relocate(popFaixa0a3, .before = popFaixa4e5) |>
+  dplyr::select(-ano.y, -codigo_municipio.y, - nome_municipio.y) |>
+  dplyr::rename(ano = ano.x, codigo_municipio = codigo_municipio.x)
+
+baseMatricula <- dplyr::left_join(matriculaCrecheNorte,
+                                  matriculaPreNorte,
+                                  by = "joinTab")
+
+baseMeta1 <- dplyr::left_join(baseMatricula,
+                              pop0a5,
+                              by = "joinTab") |>
+  dplyr::select(ano, codigo_municipio, nome_municipio.x,
+                qtdeMatCreche, popFaixa0a3, qtdeMatPre, popFaixa4e5) |>
+  dplyr::rename(nome_municipio = nome_municipio.x) |>
+  dplyr::mutate(
+    indice1b = qtdeMatCreche/popFaixa0a3,
+    indice1a = qtdeMatPre/popFaixa4e5,
+    meta1 = (qtdeMatCreche + qtdeMatPre)/(popFaixa0a3+popFaixa4e5)
+  )
+
+baseGeral <- dplyr::left_join(codMunicipios, baseMeta1, by = "codigo_municipio") |>
+  dplyr::select(-nome_municipio.x) |>
+  dplyr::rename(nome_municipio = nome_municipio.y)
+
+```
+
+
+
+
+
+
+
+
+
+
+
