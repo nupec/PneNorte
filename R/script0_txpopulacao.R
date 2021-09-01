@@ -1,4 +1,9 @@
 library(readxl)
+library(sf)
+library(geobr)
+library(ggplot2)
+library(dplyr)
+library(fs)
 
 # Importando a base de dados ----------------------------------------------
 
@@ -34,7 +39,7 @@ col3 <- df[3] |> tidyr::drop_na() |> dplyr::pull() |>
 ## Nesta etapa, as colunas 1, 2 e 3 são juntadas em um novo data frame (df2)
 df2 <- dplyr::bind_cols(col1, col2, col3) |>
   dplyr::rename(codigo_municipio = value...1,
-                nome_municipio = value...2,
+               nome_municipio = value...2,
                 nome_uf = value...3)
 
 ## Ordeno os dados pela variável "codigo_municipio" e atualizo o df2
@@ -47,5 +52,23 @@ df_final <- dplyr::bind_cols(df2, df[4:5])
 readr::write_rds(df_final, "data/indicesCidades.rds")
 
 
-# Atualizado em 01/08/2021
-# Nova atuzalização em 24/08/2021
+
+# Base de mapas -----------------------------------------------------------
+
+##  Delimitação do Brasil
+brasil <- geobr::read_country(year = 2020)
+readr::write_rds(brasil, "data-raw/Brasil_shp.rds")
+
+##  Delimitação do Estado
+estados <- geobr::read_state(year = 2020)
+readr::write_rds(estados, "data-raw/Estados_shp.rds")
+
+##  Delimitação do Municipios
+municipios <- geobr::read_municipality(year = 2020)
+readr::write_rds(municipios, "data-raw/Municipios_shp.rds")
+
+
+# Atualizações:
+# 01/08/2021
+# 24/08/2021
+# 31/08/2021
