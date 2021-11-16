@@ -1,0 +1,13 @@
+name: BI-PNE-NORTE
+title: BI-PNE-NORTE
+username:
+account: nupec
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4832245
+bundleId: 5119849
+url: https://nupec.shinyapps.io/BI-PNE-NORTE/
+when: 1633724024.40453
+lastSyncTime: 1633724024.40453
+asMultiple: FALSE
+asStatic: FALSE
