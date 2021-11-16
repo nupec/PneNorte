@@ -1,0 +1,310 @@
+---
+title: "**Plano Nacional de Educação - Norte**"
+author: "Núcelo de Pesquisa em Ciência de Dados e Otimização<br>NUPEC<br>www.nupec.ufam.edu.br"
+subtitle: "<a href='https://br.linkedin.com/in/arianehayana'>Núcleo de Pesquisa em Ciência de Dados e Otimização</a><br>#nupecUfam"
+date: "`r format(Sys.Date(), format='%d/%m/%Y')`"
+encoding: "UTF-8"
+output:
+  rmdformats::readthedown:
+   code_folding: hide
+   self_contained: true
+   thumbnails: false
+   lightbox: true
+   gallery: false
+   highlight: tango
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+[![Imagem: blog.evolucional.com](http://blog.evolucional.com.br/wp-content/uploads/2021/06/indicadores-educacionais-1024x576.jpg)](https://www.nytimes.com/guides/well/healthy-eating-for-runners)
+
+```{r setup, echo = FALSE, warning = FALSE, include = FALSE, warnings=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, fig.align = "center")
+library(ggplot2)
+library(DT)
+library(corrplot)
+library(tidyverse)
+library(knitr)
+library(plotly)
+library(patchwork)
+library(skimr)
+library(tidymodels)
+library(outliers)
+
+```
+
+
+## **Resumo**
+
+<div style="text-align: justify">
+
+
+
+**Palavras-chave:** 
+
+<div/>
+
+## **1. Introdução**
+
+<div style="text-align: justify">
+
+A busca pela universalização do acesso à educação e da melhoria da qualidade de ensino é uma meta perseguida pela sociedade brasileira há bastante tempo. Nesta direção, o Plano Nacional de Educação (PNE), aprovado pela Lei 13.005/2014, e com vigência entre 2014 e 2024, constitui um marco fundamental nas políticas públicas educacionais brasileiras. O PNE possui 20 metas e conferem ao País um horizonte para o qual os esforços dos entes federativos e da sociedade civil devem convergir com a finalidade de consolidar um sistema educacional capaz de concretizar o direito à educação em sua integralidade, dissolvendo as barreiras para o acesso e a permanência, reduzindo as desigualdades, promovendo os direitos humanos e garantindo a formação para o trabalho e para o exercício autônomo da cidadania (BRASIL, 2014, 2015).
+
+O PNE possui metas estruturantes, que visam a garantia do direito à educação básica com qualidade, que dizem respeito ao acesso, à universalização da alfabetização e à ampliação da escolaridade e das oportunidades educacionais, metas com vistas à redução das desigualdades e à valorização da diversidade, e metas para a valorização dos profissionais da educação, considerada estratégica para que as metas anteriores sejam atingidas.
+
+O Ministério da Educação publicou o 1º, 2º e 3º Relatórios referentes aos ciclos de monitoramento das metas do PNE: biênio 2014-2016, 2016-2018 e 2008-2020, exercendo, assim, sua atribuição de publicar, a cada dois anos, estudos para aferir o cumprimento das metas estabelecidas no PNE, conforme determina a Lei nº 13.005/2014. Estas publicações fazem parte de um conjunto de ações realizadas pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), voltadas à produção e disseminação de informações e a estudos direcionados a subsidiar o monitoramento do PNE, bem como à formulação, implementação e avaliação de políticas públicas na área da educação.
+
+Apesar de importantes, os relatórios de monitoramento do INEP consolidam os resultados dos estados, por região e nacional, não estando disponívies análise em nível municipal. Diante disso, este trabalho pretende seguir a mesma metodologia utilizado pelo INEP e propor uma metodologia que permita a análise dos indicadores do PNE em nível municipa.
+
+Como estudo de caso, pretende-se calcular os indicadores do PNE para a a Microrregião de Itacoatiara, composta pelos municípios de Itacoatiara, Itapiranga, Nova Olinda do Norte, Silves e Urucurituba, que fazem parte da Mesorregião denominada de Centro Amazonense, correspondendo a uma população de 177.387 habitante (IBGE, 2018), baseando-se no que nisto o objetivo geral deste trabalho é Realizar o monitoramento das metas estabelecidas
+nos Planos Municipais de Educação nos municípios de Itacoatiara, Itapiranga, Nova Olinda do Norte, Silves e Urucurituba, que formam a microrregião de Itacoatiara, levando em consideração a importância de conhecer a realidade educacional desta microrregião e apresenta-la para a sociedade.
+
+O Painel de Monitoramento do PNE pode ser acessado em: <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/inep-data/painel-de-monitoramento-do-pne>
+
+
+<div/>
+
+## **2. Objetivos**
+
+<div style="text-align: justify">
+
+### Objetivo Geral: 
+
+Analisar a evolução temporal da Meta 1 do Plano Nacional de Educação (PNE) para todos os municípios da Região Norte
+
+Meta 1:Universalizar, até 2016, a educação infantil na pré-escola para as crianças de 4 (quatro) a # 5 (cinco) anos de idade e ampliar a oferta de educação infantil em creches de forma a atender, # no mínimo, 50% (cinquenta por cento) das crianças de até 3 (três) anos até o final da vigência # deste PNE.
+
+ Objetivos Especiíficos
+ 
+1) Calcular o indicador 1A: Percentual da população de 4 e 5 anos que frequenta a escola
+ 
+2) Calcular o indicador 1B: Percentual da população de 0 a 3 anos que frequenta a escola
+
+## **3. Meta 1: Resultados e discussão**
+
+<div/>
+
+<div style="text-align: justify">
+
+<div/>
+
+```{r}
+
+meta1 <- readr::read_rds("../data/Meta1.rds") |> 
+  dplyr::mutate(ano = as.numeric(ano)) |> 
+  dplyr::filter(nome_regiao == "Norte") |> 
+  tidyr::drop_na()
+
+```
+A região norte do Brasil possui 7 estados e 450 municípios. 
+
+
+### EDA
+
+
+```{r include=FALSE}
+
+a <- meta1 |> 
+  dplyr::select(indice1b, indice1a, meta1)
+```
+
+
+```{r}
+a |> skim()
+
+
+GGally::ggpairs(a)
+
+
+```
+
+
+
+### Estatísticas Básicas
+
+```{r}
+meta1 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(across(
+    .cols = indice1b,
+    .fns = list(minino_ = min, 
+                mediana_= median, 
+                media_  = mean,
+                maximo_ = max,
+                dp_ = sd
+                )
+  )) |> 
+  round(3) |> 
+  DT::datatable()
+
+```
+
+### Valores atípicos
+
+```{r}
+ meta1 |> 
+  dplyr::group_by(ano, nome_uf) |> 
+  dplyr::summarise(
+    media1b = round(mean(indice1b), 2)
+  ) |> 
+  ggplot() +
+  geom_boxplot(aes(x= media1b, y = nome_uf)) + 
+  labs(
+    x = "Anos",
+    y = "Indicador 1B",
+    color = "Lucro ($)",
+    title = "Percentual da população de 0 a 3 anos que frequenta a escola, ",
+    subtitle = "Indicador 1B"
+  ) +
+  theme_bw()+
+  coord_flip()
+
+
+```
+
+
+
+### Análise Temporal
+
+
+
+
+
+```{r}
+meta1 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(
+    media1b = round(mean(indice1b), 2)
+  ) |> 
+  ggplot(aes(x=ano, y=media1b)) +
+  geom_line() + 
+  geom_label(aes(label = media1b)) +
+  scale_x_continuous(breaks = seq(2014, 2020, 1)) + 
+  coord_cartesian(ylim = c(0,1)) +
+  geom_abline(intercept = 0.5, slope = 0, color = "red")+
+  labs(
+    x = "Anos",
+    y = "Indicador 1B",
+    color = "Lucro ($)",
+    title = "PNE - Média Geral dos Resultado Obtidos pelos Municípios da Região Norte",
+    subtitle = "Indicador 1B"
+  ) +
+  theme_bw()
+  
+```
+
+
+```{r Leitura, echo=TRUE, message=FALSE, warnings=FALSE}
+# Leitura dos dados
+food_consumption <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv')
+
+food_consumption %>%
+  DT::datatable()
+
+```
+
+```{r}
+food_consumption %>%
+	select(consumption, co2_emmission) %>%
+   cor() %>%
+	kable()
+```
+> **Correlação não** implica em **Causalidade**!
+
+
+```{r fig.height=5, fig.width=5}
+food_consumption %>%
+	select(consumption, co2_emmission) %>%
+	cor() %>%
+   corrplot(type="upper",tl.srt=45,tl.cex = 1)
+
+```
+
+```{r}
+food_consumption %>%
+ group_by(food_category) %>%
+ summarise(total_consumo = sum(consumption),
+           total_emissao_co2 = sum(co2_emmission)) %>%
+ arrange(-total_consumo) %>%
+   head(10) %>%
+ kable()
+```
+
+```{r}
+food_consumption %>%  
+  group_by(food_category) %>%  
+  summarise(total_emissao_co2 = sum(co2_emmission)) %>%  
+  ggplot(aes(x = food_category, y = total_emissao_co2,fill = food_category)) +        
+aes(reorder(food_category, total_emissao_co2))+ 
+  geom_col() +  
+  coord_flip() +  
+    ggthemes::theme_wsj() +
+   guides(fill = "none")+
+   labs(
+    title = "Ranking de emissão de \nCO2 por categoria \nalimentar",
+    x = "Categoria",
+    y = "Emissão de Co2 (Kg CO2/pessoa/ano)",
+    color = "Categoria alimentar")
+
+```
+<br>
+
+
+```{r fig.height=16, fig.width=9}
+
+ggplot(food_consumption, aes(x = reorder(country,co2_emmission), y = co2_emmission)) +
+   geom_col(aes(fill = food_category)) +
+  coord_flip() +
+   labs(
+    title = "Representação gráfica da emissão de CO2 por categoria alimentar",
+    x = "País",
+    y = "Emissão de Co2 (Kg CO2/pessoa/ano)",
+    color = "Categoria alimentar",
+    caption = "Elaborado por: Ariane Hayana Thomé de Farias") +
+   scale_fill_viridis_d(
+    alpha = .99, 
+    begin = .1, 
+    end = .9, 
+    direction = 1, 
+    option = "D") +
+    theme_bw() 
+
+
+```
+
+```{r, warnings=FALSE}
+plot_ly(food_consumption, 
+        y = ~co2_emmission, 
+        color = ~food_category, 
+        type = "box")
+```
+
+```{r, warnings=FALSE}
+plot_ly(food_consumption, 
+        y = ~consumption, 
+        color = ~food_category, 
+        type = "box")
+```
+
+## **4. Considerações finais**
+
+<div style="text-align: justify">
+
+
+<div/>
+
+## **Referências**
+
+- Food carbon footprint index 2018: <br> 
+https://www.nu3.de/blogs/nutrition/food-carbon-footprint-index-2018
+
+- GitHub do #TidyTuesday: <br> https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-02-18
+
+- Webscraping with R - from messy & unstructured to blisfully tidy: <br>
+https://r-tastic.co.uk/post/from-messy-to-tidy/
+
+
+<div/>
+
+

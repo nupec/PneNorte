@@ -1,0 +1,74 @@
+---
+title: "Plano Nacional de Educação "
+description: |
+  A new article created using the Distill format.
+author:
+  - name: Nora Jones 
+    url: https://example.com/norajones
+    affiliation: Spacely Sprockets
+    affiliation_url: https://example.com/spacelysprokets
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include = FALSE}
+library(sf)
+library(geobr)
+library(ggplot2)
+library(dplyr)
+library(fs)
+
+brasil         <- readr::read_rds("../data-raw/Brasil_shp.rds")
+estados        <- readr::read_rds("../data-raw/Estados_shp.rds")
+municipios     <- readr::read_rds("../data-raw/Municipios_shp.rds")
+dados_idh_muni <- readr::read_rds("../data-raw/dados_idh_muni.rds")
+Meta1         <- readr::read_rds("../data/Meta1.rds")|> dplyr::rename(code_muni = codigo_municipio)
+
+Norte <- municipios |> dplyr::filter(name_region=="Norte")
+
+apendice <- dplyr::full_join(Norte, Meta1, by= c("code_muni"))
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+
+
+```
+
+### Meta 1: Meta 1:Universalizar, até 2016, a educação infantil na pré-escola para as crianças de 4 (quatro) a # 5 (cinco) anos de idade e ampliar a oferta de educação infantil em creches de forma a atender, # no mínimo, 50% (cinquenta por cento) das crianças de até 3 (três) anos até o final da vigência # deste PNE.
+
+### Calcular o indicador 1B: Percentual da população de 0 a 3 anos que frequenta a escola
+
+```{r echo=FALSE, warning=FALSE}
+
+apendice |> dplyr::filter(!is.na(meta1)) |>
+      ggplot(aes(fill = indice1b)) +
+      geom_sf() +
+      theme_bw()
+```
+
+###  Indicador 1A: Percentual da população de 4 e 5 anos que frequenta a escola
+
+```{r echo=FALSE, warning=FALSE}
+
+apendice |> dplyr::filter(!is.na(meta1)) |>
+      ggplot(aes(fill = indice1a)) +
+      geom_sf() +
+      theme_bw()
+
+```
+
+### Meta 1
+
+```{r echo=FALSE, warning=FALSE}
+
+apendice |> dplyr::filter(!is.na(meta1)) |>
+      dplyr::filter(meta1 <=1) |>
+      ggplot(aes(fill = meta1)) +
+      geom_sf(color = "black", size = 0) +
+      scale_fill_viridis_c(option = "") +
+      theme_bw()
+```
+

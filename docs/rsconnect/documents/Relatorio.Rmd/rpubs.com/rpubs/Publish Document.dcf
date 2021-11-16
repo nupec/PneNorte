@@ -1,0 +1,11 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/810603/5304c356469b4a8793bc5aaaca3bc6f0
+bundleId: https://api.rpubs.com/api/v1/document/810603/5304c356469b4a8793bc5aaaca3bc6f0
+url: http://rpubs.com/nupec-ufam/810603
+when: 1631914318.26179
+lastSyncTime: 1631914318.26179
