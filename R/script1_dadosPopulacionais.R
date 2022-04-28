@@ -8,10 +8,7 @@ indices_tidy <- readr::read_rds("data/indicesCidades.rds")
 
 # 2) Importando a estimativa da população das cidades brasileiras --------
 ## 2.1) Importando as estimativas da população (2001 a 2020)
-populacao_municipios <- readxl::read_excel("data-raw/popBrasilESTIMADA.xlsx")
-
-## 2.2) Transformando a base importada no formato tidy
-populacao_municipios_tidy <- readRDS("data/popMunBr1991a2021.rds") |>
+populacao_municipios <- readRDS("data/popMunBr1991a2021.rds") |>
   dplyr::rename(
     codigo_municipio = id_municipio
   ) |>
@@ -20,7 +17,7 @@ populacao_municipios_tidy <- readRDS("data/popMunBr1991a2021.rds") |>
   )
 
 ## 2.4) EStimando a população desagregadas por idade
-pop_est_idade <- dplyr::left_join(populacao_municipios_tidy,
+pop_est_idade <- dplyr::left_join(populacao_municipios,
                                   indices_tidy,
                                   by="codigo_municipio")|>
   dplyr::arrange(ano, idade) |>
