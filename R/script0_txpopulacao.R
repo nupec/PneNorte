@@ -8,11 +8,24 @@ url("https://sidra.ibge.gov.br/tabela/1552?fbclid=IwAR3PonnEhgVF1jdvbkyUnGCFvg2d
 
 ## A seguir, importa-se a tabela 1552 e corrige-se o tipo de variável
 ## "codigo_municipio" para o formato numérico.
+
+# 1) Coeficientes populacionais das idade simples por município brasileiro, ano de referência: 2010
+
 df <- readxl::read_excel("data-raw/tabela1552_tidy.xlsx", sheet = 2) |>
   dplyr::mutate(
     codigo_municipio = as.numeric(codigo_municipio)
   ) |>
   tidyr::fill(c("codigo_municipio", "nome_municipio", "nome_uf"))
+
+# População dos municípios brsileiros entre 1991 e 2021
+
+basedosdados::set_billing_id("indicadores-educacionais")
+
+# Para carregar o dado direto no R
+query <- basedosdados::bdplyr("br_ibge_populacao.municipio")
+popMunicipiosBr <-basedosdados::bd_collect(query)
+
+readr::write_rds()
 
 # Base de mapas -----------------------------------------------------------
 
