@@ -1,9 +1,3 @@
-library(readxl)
-library(sf)
-library(geobr)
-library(ggplot2)
-library(dplyr)
-library(fs)
 
 # Importando a base de dados ----------------------------------------------
 
@@ -39,3 +33,4 @@ readr::write_rds(municipios, "data-raw/Municipios_shp.rds")
 # 01/08/2021
 # 24/08/2021
 # 31/08/2021
+# 28/04/2021
