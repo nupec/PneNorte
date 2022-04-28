@@ -11,11 +11,10 @@ indices_tidy <- readr::read_rds("data/indicesCidades.rds")
 populacao_municipios <- readxl::read_excel("data-raw/popBrasilESTIMADA.xlsx")
 
 ## 2.2) Transformando a base importada no formato tidy
-populacao_municipios_tidy <- populacao_municipios |>
-  tidyr::pivot_longer(
-    cols = starts_with("20"),
-    names_to = "ano",
-    values_to = "populacao") |>
+populacao_municipios_tidy <- readRDS("data/popMunBr1991a2021.rds") |>
+  dplyr::rename(
+    codigo_municipio = id_municipio
+  ) |>
   dplyr::mutate(
     codigo_municipio = as.numeric(codigo_municipio)
   )
@@ -25,10 +24,9 @@ pop_est_idade <- dplyr::left_join(populacao_municipios_tidy,
                                   indices_tidy,
                                   by="codigo_municipio")|>
   dplyr::arrange(ano, idade) |>
-  dplyr::rename(nome_municipio = nome_municipio.x) |>
   dplyr::mutate(populacao_estimada = ceiling(populacao*prop)) |>
-  dplyr::select(codigo_municipio, nome_municipio, ano, nome_uf,
-                idade, populacao_estimada)
+  dplyr::select(codigo_municipio, nome_municipio, nome_uf,
+                ano, idade, populacao_estimada)
 
 ## 3) Salvando em arquivo rds
 readr::write_rds(pop_est_idade,"data/populacaoEstimadaPorIdade.rds")

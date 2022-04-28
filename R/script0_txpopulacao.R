@@ -17,7 +17,7 @@ df <- readxl::read_excel("data-raw/tabela1552_tidy.xlsx", sheet = 2) |>
   ) |>
   tidyr::fill(c("codigo_municipio", "nome_municipio", "nome_uf"))
 
-# População dos municípios brsileiros entre 1991 e 2021
+# 2) População dos municípios brsileiros entre 1991 e 2021
 
 basedosdados::set_billing_id("indicadores-educacionais")
 
@@ -25,9 +25,9 @@ basedosdados::set_billing_id("indicadores-educacionais")
 query <- basedosdados::bdplyr("br_ibge_populacao.municipio")
 popMunicipiosBr <-basedosdados::bd_collect(query)
 
-readr::write_rds()
+readr::write_rds(popMunicipiosBr, "data/popMunBr1991a2021.rds")
 
-# Base de mapas -----------------------------------------------------------
+# 3) Base de mapas -----------------------------------------------------------
 
 ##  Delimitação do Brasil
 brasil <- geobr::read_country(year = 2020)
