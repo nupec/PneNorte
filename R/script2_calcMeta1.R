@@ -1,10 +1,21 @@
 
+# Meta 1: Universalizar, até 2016, a educação infantil na pré-escola para as
+# crianças de 4 (quatro) a 5 (cinco) anos de idade e ampliar a oferta de educação
+# infantil em creches de forma a atender, no mínimo, 50% (cinquenta por cento)
+# das crianças de até 3 (três) anos até o final da vigência deste PNE.
+
+# Indicador 1A: Percentual da população de 4 a 5 anos que frequenta a
+# escola/creche.
+
+# Indicador 1B: Percentual da população de 0 a 3 anos que frequenta a
+# escola/creche.
+
 # Carregando a base de dados ------------------------------------
 brasil         <- readr::read_rds("data-raw/Brasil_shp.rds")
 estados        <- readr::read_rds("data-raw/Estados_shp.rds")
 municipios     <- readr::read_rds("data-raw/Municipios_shp.rds")
 dados_idh_muni <- readr::read_rds("data-raw/dados_idh_muni.rds")
-matriculaNorte <- readr::read_rds("data-raw/matricula1320.rds")
+matriculaNorte <- readr::read_rds("data/matricula1320.rds")
 populacaoEst   <- readr::read_rds("data/populacaoEstimadaPorIdade.rds")
 codMunicipios <- readxl::read_excel("data-raw/CODIGO_MUNICIPIO.xls")
 
@@ -35,7 +46,7 @@ codMunicipios <- codMunicipios |> janitor::clean_names() |>
     codigo_municipio = as.numeric(codigo_municipio)
   )
 
-# Matrículas da Educação Infantil por ano e municicipio entre os anos de 2020
+# Matrículas da Educação Infantil por ano e municipio entre os anos de 2020
 matriculaEduInf <- matriculaNorte |>
   dplyr::filter(ano %in% "2014":"2020") |>
   dplyr::filter(tp_etapa_ensino %in% "1":"2") |>
@@ -88,6 +99,8 @@ popPreEst <- populacaoEst |>
                              sep = "_")) |>
   dplyr::relocate("joinTab",.after = "nome_municipio")
 
+## Reunindo as bases das matrículas e da população de 0 a 5 anos
+
 pop0a5 <- dplyr::left_join(popCrecheEst, popPreEst, by = "joinTab" ) |>
   dplyr::relocate(popFaixa0a3, .before = popFaixa4e5) |>
   dplyr::select(-ano.y, -codigo_municipio.y, - nome_municipio.y) |>
@@ -97,6 +110,7 @@ baseMatricula <- dplyr::left_join(matriculaCrecheNorte,
                                   matriculaPreNorte,
                                   by = "joinTab")
 
+## Agrupando as variáveis pela chave primária e calculando os indicadores
 baseMeta1 <- dplyr::left_join(baseMatricula,
                               pop0a5,
                               by = "joinTab") |>
@@ -104,11 +118,12 @@ baseMeta1 <- dplyr::left_join(baseMatricula,
                 qtdeMatCreche, popFaixa0a3, qtdeMatPre, popFaixa4e5) |>
   dplyr::rename(nome_municipio = nome_municipio.x) |>
   dplyr::mutate(
-    indice1b = qtdeMatCreche/popFaixa0a3,
-    indice1a = qtdeMatPre/popFaixa4e5,
-    meta1 = (qtdeMatCreche + qtdeMatPre)/(popFaixa0a3+popFaixa4e5)
+    indicador1b = qtdeMatCreche/popFaixa0a3,
+    indicador1a = qtdeMatPre/popFaixa4e5 #,
+    # meta1 = (qtdeMatCreche + qtdeMatPre)/(popFaixa0a3+popFaixa4e5)
   )
 
+## Salvando a base da Meta 1
 baseGeral <- dplyr::left_join(codMunicipios, baseMeta1, by = "codigo_municipio") |>
   dplyr::select(-nome_municipio.x) |>
   dplyr::rename(nome_municipio = nome_municipio.y)

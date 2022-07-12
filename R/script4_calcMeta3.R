@@ -1,18 +1,17 @@
 
-# Meta 3: Universalizar, até 2016, o atendimento escolar para toda a população de
-# 15 (quinze) a 17 (dezessete) anos e elevar, até o final do período de vigência
-# deste PNE, a taxa líquida de matrículas no ensino médio para 85% (oitenta e cinco
-# por cento).
+# Meta 3: Universalizar, até 2016, o atendimento escolar para toda a população de 15
+# (quinze) a 17 (dezessete) anos e elevar, até o final do período de vigência deste
+# PNE, a taxa líquida de matrículas no ensino médio para 85% (oitenta e cinco por cento).
 
-# Indicador 3A: Percentual da população de 15 a 17 anos que frequenta a escola
-# ou já concluiu a educação básica
+# Indicador 3A: Percentual da população de 15 a 17 anos que frequenta a escola ou já concluiu
+# a educação básica.
 
-# Indicador 3B: Percentual da população de 15 a 17 anos que frequenta o ensino médio
-# ou possui educação básica completa
+# Indicador 3B: Percentual da população de 15 a 17 anos que frequenta o ensino médio ou
+# possui educação básica completa.
 
-# Carregando a base de dados ------------------------------------
-matriculaNorte <- readr::read_rds("data-raw/matricula1320.rds") # numerador
-populacaoEst   <- readr::read_rds("data/populacaoEstimadaPorIdade.rds") # denominador
+# Carregando a base de dados ----------------------------------------------
+matriculaNorte <- readr::read_rds("data-raw/matricula1320.rds")
+populacaoEst   <- readr::read_rds("data/populacaoEstimadaPorIdade.rds")
 codMunicipios  <- readxl::read_excel("data-raw/CODIGO_MUNICIPIO.xls")
 
 # Tratamento da base dados ------------------------------------------------
@@ -27,66 +26,54 @@ codMunicipios  <- readxl::read_excel("data-raw/CODIGO_MUNICIPIO.xls")
 
 ## cod_Municipios: contém todos os códigos das divisões territoriais brasileira,
 
-# Tratando os nomes das variáveis da base: MatriculaNorte
-matriculaNorte <- matriculaNorte |> janitor::clean_names() |>
-  dplyr::rename(ano = nu_ano_censo,
-                idade = nu_idade_referencia,
-                codigo_municipio = co_municipio)
+# Agrupando as matriculas --------------------------------------------------
 
-# Tratando os nomes das variáveis da base: Código dos Municípios
-codMunicipios <- codMunicipios |> janitor::clean_names() |>
-  dplyr::rename(co_uf = uf,
-                codigo_municipio = codigo_municipio_completo) |>
-  dplyr::select(-municipio) |>
-  dplyr::mutate(
-    codigo_municipio = as.numeric(codigo_municipio)
-  )
+## Indicador 3A
 
-# Seguindo a metodologia do INEP para estimativa do indicador
+# Matrículas do Ensino Fundamental,Médio e EJA por ano e municicipio entre os anos de
+# 2014 a 2020
 
-## São criadas as variáveis para o Ensino Regular (EF_regular),
-## EJA (EF_EJA) e, caso tenha concluído o Ensino Fundamental (EF_conc)
-
-# Matrículas da Ensino Fundamental por ano e municicipio entre os anos de 2014
-# a 2020
-
-EF_regular <- matriculaNorte |>
+EF_EM_EJA_EP_15a17 <- matriculaNorte |>
+  dplyr::filter(idade %in% c(15:17)) |>
   dplyr::filter(ano %in% "2014":"2020") |>
-  dplyr::filter(tp_etapa_ensino %in% c("25":"29")) |>
+  dplyr::filter(tp_etapa_ensino %in% c("14":"21","25":"41","67":"71","73":"74")) |>
   dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
   dplyr::count(codigo_municipio) |>
   dplyr::mutate(
     joinTab = stringr::str_c(ano, codigo_municipio,
                              sep = "_")
-  ) |> dplyr::rename(qtdeMat = n)
+  ) |> dplyr::rename(qtdeMat_escola15a17 = n)
 
-EF_EJA <- matriculaNorte |>
+### OBS 1: Aqui está sendo somado somente as pessoas de 15 a 17 anos que estão matriculadas no
+### fundamental, médio, EJA e cursos tecnicos.
+
+### OBS 2: Ainda não estão nesta conta as pessoas de 15 a 17 anos que concluíram a educação básica
+### e estão no ensino superior e as pessoas que concluíram a EB e estão fora do sistema escolar.
+
+## Indicador 3B
+
+# Matrículas do Ensino Médio por ano e municicipio entre os anos de
+# 2014 a 2020
+
+EM_15a17 <- matriculaNorte |>
+  dplyr::filter(idade %in% c(15:17)) |>
   dplyr::filter(ano %in% "2014":"2020") |>
-  dplyr::filter(tp_etapa_ensino %in% c("14":"21","41")) |>
+  dplyr::filter(tp_etapa_ensino %in% c("25":"40","67","71","74")) |>
   dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
   dplyr::count(codigo_municipio) |>
   dplyr::mutate(
     joinTab = stringr::str_c(ano, codigo_municipio,
                              sep = "_")
-  ) |> dplyr::rename(qtdeMat = n)
+  ) |> dplyr::rename(qtdeMat_EM15a17 = n)
 
-EF_conc <- matriculaNorte |>
-  dplyr::filter(ano %in% "2014":"2020") |>
-  dplyr::filter(tp_etapa_ensino %in% c("14":"21","41")) |>
-  dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
-  dplyr::count(codigo_municipio) |>
-  dplyr::mutate(
-    joinTab = stringr::str_c(ano, codigo_municipio,
-                             sep = "_")
-  ) |> dplyr::rename(qtdeMat = n)
 # Agrupando as populações --------------------------------------------------
 
 ## Agrupando a população de 15 a 17 anos
-popEnsFund <- populacaoEst |>
-  dplyr::filter(idade %in% c(15:15)) |>
+pop15a17 <- populacaoEst |>
+  dplyr::filter(idade %in% c(15:17)) |>
   dplyr::group_by(ano, codigo_municipio, nome_municipio) |>
   dplyr::summarise(
-    popFaixa6a14 = sum(populacao_estimada)
+    popFaixa15a17 = sum(populacao_estimada)
   ) |>
   dplyr::group_by(codigo_municipio) |>
   dplyr::mutate(
@@ -94,22 +81,46 @@ popEnsFund <- populacaoEst |>
                              sep = "_")) |>
   dplyr::relocate("joinTab",.after = "nome_municipio")
 
-baseMeta2 <- dplyr::left_join(matriculaEnsFund,
-                              popEnsFund,
-                              by = "joinTab") |>
-  dplyr::select(ano, codigo_municipio, nome_municipio.x,
-                qtdeMatCreche, popFaixa0a3, qtdeMatPre, popFaixa4e5) |>
-  dplyr::rename(nome_municipio = nome_municipio.x) |>
+# Agrupando as variáveis e calculando os indicadores ----------------------
+
+## Indicador 3B
+
+baseindicador3B <- dplyr::left_join(EM_15a17,
+                                    pop15a17,
+                                    by = "joinTab") |>
+  dplyr::select(ano.x, codigo_municipio.x, nome_municipio,
+                qtdeMat_EM15a17, popFaixa15a17) |>
+  dplyr::rename(codigo_municipio = codigo_municipio.x,ano = ano.x) |>
+  dplyr::group_by(ano,codigo_municipio,nome_municipio,popFaixa15a17) |>
+  dplyr::summarise(total_mat_EM_15a17 = sum(qtdeMat_EM15a17, na.rm = T)) |>
   dplyr::mutate(
-    indice1b = qtdeMatCreche/popFaixa0a3,
-    indice1a = qtdeMatPre/popFaixa4e5,
-    meta1 = (qtdeMatCreche + qtdeMatPre)/(popFaixa0a3+popFaixa4e5)
-  )
+    indicador3B = total_mat_EM_15a17/popFaixa15a17
+  ) |> dplyr::relocate("popFaixa15a17",.after = "total_mat_EM_15a17")|>
+  dplyr::mutate(joinTab = stringr::str_c(ano, codigo_municipio,sep = "_"))
 
-baseGeral <- dplyr::left_join(codMunicipios, baseMeta1, by = "codigo_municipio") |>
-  dplyr::select(-nome_municipio.x) |>
-  dplyr::rename(nome_municipio = nome_municipio.y)
+## Indicador 3A
 
+baseindicador3A <- dplyr::left_join(EF_EM_EJA_EP_15a17,
+                                    pop15a17,
+                                    by = "joinTab") |>
+  dplyr::select(ano.x, codigo_municipio.x, nome_municipio,
+                qtdeMat_escola15a17, popFaixa15a17) |>
+  dplyr::rename(codigo_municipio = codigo_municipio.x,ano = ano.x) |>
+  dplyr::group_by(ano,codigo_municipio,nome_municipio,popFaixa15a17) |>
+  dplyr::summarise(total_mat_escola_15a17 = sum(qtdeMat_escola15a17, na.rm = T)) |>
+  dplyr::mutate(
+    indicador3A = total_mat_escola_15a17/popFaixa15a17
+  ) |> dplyr::relocate("popFaixa15a17",.after = "total_mat_escola_15a17") |>
+  dplyr::mutate(joinTab = stringr::str_c(ano, codigo_municipio,sep = "_"))
 
-readr::write_rds(baseGeral, "data/Meta3.rds")
+## Juntando as bases dos indicadores e salvando a base geral da meta 3
 
+baseMeta3 <- dplyr::left_join(baseindicador3B,
+                              baseindicador3A,by = "joinTab")|>
+  dplyr::select(-ano.y, -codigo_municipio.y, - nome_municipio.y,
+                -joinTab,-popFaixa15a17.y)|>
+  dplyr::rename(ano = ano.x, codigo_municipio = codigo_municipio.x,
+                nome_municipio = nome_municipio.x,
+                popFaixa15a17 = popFaixa15a17.x)
+
+readr::write_rds(baseMeta3, "data/Meta3.rds")

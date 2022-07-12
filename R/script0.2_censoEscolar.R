@@ -1,6 +1,6 @@
 ## Empilhando as bases do Censo Escolar -----------------------------------------------------
 
-## Neste scrip, importa-se as bases do Censo Escolar que serão úteis em
+## Neste scrip, importa-se as bases do Censo Escolar que serão úteis nas
 ## pesquisas futuras
 
 ## As varáveis dos anos 2013 a 2014 possuem nomes diferentes, por isso a decisão
@@ -28,10 +28,9 @@ arq_matriculas_no_1314 <-list.files("data-raw/2013_2014/",
 
 arq_matriculas_no_1520 <-list.files("data-raw/2015_2020/",
                                     full.names = T)
-
 ## Aqui, eu importo as Matrículas dos alunos do Norte do Brasil
 ## Eu opto pelo pacote função "fread" do pacote data.table, pela possibilidade
-## de importar apenas as variáveies de interesse.
+## de importar apenas as variáveis de interesse.
 
 matriculas_no_1314 <- purrr::map_dfr(arq_matriculas_no_1314,
                                      data.table::fread,

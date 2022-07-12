@@ -19,11 +19,11 @@ df <- readxl::read_excel("data-raw/tabela1552_tidy.xlsx", sheet = 2) |>
 
 # 2) População dos municípios brsileiros entre 1991 e 2021
 
-basedosdados::set_billing_id("indicadores-educacionais")
+basedosdados::set_billing_id("indicadores-educacionais-ods4")
 
 # Para carregar o dado direto no R
 query <- basedosdados::bdplyr("br_ibge_populacao.municipio")
-popMunicipiosBr <-basedosdados::bd_collect(query)
+popMunicipiosBr <- basedosdados::bd_collect(query)
 
 readr::write_rds(popMunicipiosBr, "data/popMunBr1991a2021.rds")
 
@@ -47,3 +47,5 @@ readr::write_rds(municipios, "data-raw/Municipios_shp.rds")
 # 24/08/2021
 # 31/08/2021
 # 28/04/2021
+
+

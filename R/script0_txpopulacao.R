@@ -17,9 +17,9 @@ df <- readxl::read_excel("data-raw/tabela1552_tidy.xlsx", sheet = 2) |>
   ) |>
   tidyr::fill(c("codigo_municipio", "nome_municipio", "nome_uf"))
 
-# 2) População dos municípios brsileiros entre 1991 e 2021
+# 2) População dos municípios brasileiros entre 1991 e 2021
 
-basedosdados::set_billing_id("indicadores-educacionais")
+basedosdados::set_billing_id("indicadores-educacionais-ods4")
 
 # Para carregar o dado direto no R
 query <- basedosdados::bdplyr("br_ibge_populacao.municipio")

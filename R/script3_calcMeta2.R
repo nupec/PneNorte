@@ -4,18 +4,14 @@
 # (noventa e cinco por cento) dos alunos concluam essa etapa na idade recomendada,
 # até o último ano de vigência deste PNE.
 
-# Indicador 2A: Percentual de pessoas de 6 a 14 anos que frequentam ou que já concluíram o
-# ensino fundamental (taxa de escolarização líquida ajustada).
+# Indicador 2A: Percentual de pessoas de 6 a 14 anos que frequentam ou que já concluíram
+# o ensino fundamental (taxa de escolarização líquida ajustada).
 
 # Indicador 2B: Percentual de pessoas de 16 anos com pelo menos o ensino fundamental
 # concluído.
 
 # Carregando a base de dados ------------------------------------
-brasil         <- readr::read_rds("data-raw/Brasil_shp.rds")
-estados        <- readr::read_rds("data-raw/Estados_shp.rds")
-municipios     <- readr::read_rds("data-raw/Municipios_shp.rds")
-dados_idh_muni <- readr::read_rds("data-raw/dados_idh_muni.rds")
-matriculaNorte <- readr::read_rds("data-raw/matricula1320.rds")
+matriculaNorte <- readr::read_rds("data/matricula1320.rds")
 populacaoEst   <- readr::read_rds("data/populacaoEstimadaPorIdade.rds")
 codMunicipios  <- readxl::read_excel("data-raw/CODIGO_MUNICIPIO.xls")
 
@@ -45,48 +41,57 @@ codMunicipios <- codMunicipios |> janitor::clean_names() |>
   dplyr::mutate(
     codigo_municipio = as.numeric(codigo_municipio)
   )
+# Agrupando as matriculas --------------------------------------------------
 
-# Seguindo a metodologia do INEP para estimativa do indicador
-
-## São criadas as variáveis para o Ensino Regular (EF_regular),
-## EJA (EF_EJA) e, caso tenha concluído o Ensino Fundamental (EF_conc)
+## Indicador 2A
 
 # Matrículas da Ensino Fundamental por ano e municicipio entre os anos de 2014
 # a 2020
 
-EF_regular <- matriculaNorte |>
+EF_6a14 <- matriculaNorte |>
+  dplyr::filter(idade %in% c(6:14)) |>
   dplyr::filter(ano %in% "2014":"2020") |>
-  dplyr::filter(tp_etapa_ensino %in% c("14":"21","41")) |>
+  dplyr::filter(tp_etapa_ensino %in% c("14":"21","41","25":"40","68")) |>
   dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
   dplyr::count(codigo_municipio) |>
   dplyr::mutate(
     joinTab = stringr::str_c(ano, codigo_municipio,
                              sep = "_")
-  ) |> dplyr::rename(qtdeMat = n)
+  ) |> dplyr::rename(qtdeMat_6a14 = n)
 
-EF_EJA <- matriculaNorte |>
-  dplyr::filter(ano %in% "2014":"2020") |>
-  dplyr::filter(tp_etapa_ensino %in% c("14":"21","41")) |>
-  dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
-  dplyr::count(codigo_municipio) |>
-  dplyr::mutate(
-    joinTab = stringr::str_c(ano, codigo_municipio,
-                             sep = "_")
-  ) |> dplyr::rename(qtdeMat = n)
+### OBS 1: Aqui está sendo somado as pessoas de 6 a 14 anos que estão matriculadas no
+### fundamental ou que concluíram o EF e estão no ensino médio.
 
-EF_conc <- matriculaNorte |>
+### OBS 2: Ainda não estão nesta conta as pessoas de 6 a 14 anos que concluíram o EF e
+### estão no ensino superior e as pessoas que concluíram o EF e estão fora do sistema escolar.
+
+### OBS 3: Não inclui alunos em etapas do EJA.
+
+## Indicador 2B
+
+EF_conc_16 <- matriculaNorte |>
+  dplyr::filter(idade == "16") |>
   dplyr::filter(ano %in% "2014":"2020") |>
-  dplyr::filter(tp_etapa_ensino %in% c("14":"21","41")) |>
+  dplyr::filter(tp_etapa_ensino %in% c("25":"40","67","71","74")) |>
   dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
   dplyr::count(codigo_municipio) |>
   dplyr::mutate(
     joinTab = stringr::str_c(ano, codigo_municipio,
                              sep = "_")
-  ) |> dplyr::rename(qtdeMat = n)
+  ) |> dplyr::rename(qtdeMat_16 = n)
+
+### OBS 1: Verificar no censo escolar do ensino superior todos os alunos
+### com 16 anos.
+
+### OBS 2: Este indicador não contempla as pessoas de 16 anos que estão
+### fora do sistema escolar.
+
+### OBS 3: Inclui etapas do EJA.
+
 # Agrupando as populações --------------------------------------------------
 
 ## Agrupando a população de 6 a 14 anos
-popEnsFund <- populacaoEst |>
+popEnsFund6a14 <- populacaoEst |>
   dplyr::filter(idade %in% c(6:14)) |>
   dplyr::group_by(ano, codigo_municipio, nome_municipio) |>
   dplyr::summarise(
@@ -98,21 +103,68 @@ popEnsFund <- populacaoEst |>
                              sep = "_")) |>
   dplyr::relocate("joinTab",.after = "nome_municipio")
 
-baseMeta2 <- dplyr::left_join(matriculaEnsFund,
-                              popEnsFund,
-                              by = "joinTab") |>
-  dplyr::select(ano, codigo_municipio, nome_municipio.x,
-                qtdeMatCreche, popFaixa0a3, qtdeMatPre, popFaixa4e5) |>
-  dplyr::rename(nome_municipio = nome_municipio.x) |>
+## Agrupando a população de 16 anos
+popEnsFund16 <- populacaoEst |>
+  dplyr::filter(idade == "16") |>
+  dplyr::group_by(ano, codigo_municipio, nome_municipio) |>
+  dplyr::summarise(
+    popFaixa16 = sum(populacao_estimada)
+  ) |>
+  dplyr::group_by(codigo_municipio) |>
   dplyr::mutate(
-    indice1b = qtdeMatCreche/popFaixa0a3,
-    indice1a = qtdeMatPre/popFaixa4e5,
-    meta1 = (qtdeMatCreche + qtdeMatPre)/(popFaixa0a3+popFaixa4e5)
-  )
+    joinTab = stringr::str_c(ano, codigo_municipio,
+                             sep = "_")) |>
+  dplyr::relocate("joinTab",.after = "nome_municipio")
 
-baseGeral <- dplyr::left_join(codMunicipios, baseMeta1, by = "codigo_municipio") |>
-  dplyr::select(-nome_municipio.x) |>
-  dplyr::rename(nome_municipio = nome_municipio.y)
+# Agrupando as variáveis e calculando os indicadores -----------------------
 
+## Indicador 2A
 
-readr::write_rds(baseGeral, "data/Meta1.rds")
+baseindicador2A <- dplyr::left_join(EF_6a14,
+                                    popEnsFund6a14,
+                              by = "joinTab") |>
+  dplyr::select(ano.x, codigo_municipio.x, nome_municipio,
+                qtdeMat_6a14, popFaixa6a14) |>
+  dplyr::rename(codigo_municipio = codigo_municipio.x,ano = ano.x) |>
+  dplyr::group_by(ano,codigo_municipio,nome_municipio,popFaixa6a14) |>
+  dplyr::summarise(total_mat_6a14 = sum(qtdeMat_6a14, na.rm = T)) |>
+  dplyr::mutate(
+    indicador2A = total_mat_6a14/popFaixa6a14
+  ) |> dplyr::relocate("popFaixa6a14",.after = "total_mat_6a14")|>
+  dplyr::mutate(joinTab = stringr::str_c(ano, codigo_municipio,
+                                         sep = "_"))
+
+## Indicador 2B
+
+baseindicador2B <- dplyr::left_join(EF_conc_16,
+                                    popEnsFund16,
+                                    by = "joinTab") |>
+  dplyr::select(ano.x, codigo_municipio.x, nome_municipio,
+                qtdeMat_16, popFaixa16) |>
+  dplyr::rename(codigo_municipio = codigo_municipio.x,ano = ano.x) |>
+  dplyr::group_by(ano,codigo_municipio,nome_municipio,popFaixa16) |>
+  dplyr::summarise(total_mat_16 = sum(qtdeMat_16, na.rm = T)) |>
+  dplyr::mutate(
+    indicador2B = total_mat_16/popFaixa16
+  ) |> dplyr::relocate("popFaixa16",.after = "total_mat_16") |>
+  dplyr::mutate(joinTab = stringr::str_c(ano, codigo_municipio,
+                                         sep = "_"))
+
+## Juntando as bases dos indicadores e salvando a base geral da meta 2
+
+baseMeta2 <- dplyr::left_join(baseindicador2B,
+                              baseindicador2A,by = "joinTab")|>
+  dplyr::select(-ano.y, -codigo_municipio.y, - nome_municipio.y,
+                -joinTab)|>
+  dplyr::rename(ano = ano.x, codigo_municipio = codigo_municipio.x,
+                nome_municipio = nome_municipio.x)
+
+readr::write_rds(baseMeta2, "data/Meta2.rds")
+
+### Criando um token para atualizar os scripts no github----------------------
+
+# library(usethis)
+# use_git_config(user.name = "Nupec", user.email = "nupec@ufam.edu.br")
+# usethis::create_github_token()
+# gitcreds::gitcreds_set()
+# ----------------------------------------------------------------------------
