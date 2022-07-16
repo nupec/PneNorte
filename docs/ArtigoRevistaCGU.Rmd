@@ -12,17 +12,17 @@ Hidelbrando Ferreira Rodrigues, Augusto Sousa da Silva Filho, Marco André Santo
 
 ## Resumo
 
-`r lorem::ipsum()`
+
 
 **Palavras-chave:** Palavra 1; Palavra 2; Palavra 3
 
 ## Abstract
-`r lorem::ipsum()`
+
 
 **Keywords:** Word 1; Word 2; Word 3
 
 ## Resumén
-`r lorem::ipsum()`
+
 
 **Palabras llave:** Palabra 1; Palabra 2; Palabra 3
 
@@ -33,22 +33,45 @@ A busca pela universalização do acesso à educação e da melhoria da qualidad
 
 O PNE possui metas estruturantes, que visam a garantia do direito à educação básica com qualidade, que dizem respeito ao acesso, à universalização da alfabetização e à ampliação da escolaridade e das oportunidades educacionais, metas com vistas à redução das desigualdades e à valorização da diversidade, e metas para a valorização dos profissionais da educação, considerada estratégica para que as metas anteriores sejam atingidas.
 
-O Ministério da Educação publicou o 1º, 2º e 3º Relatórios referentes aos ciclos de monitoramento das metas do PNE: biênio 2014-2016, 2016-2018 e 2008-2020, exercendo, assim, sua atribuição de publicar, a cada dois anos, estudos para aferir o cumprimento das metas estabelecidas no PNE, conforme determina a Lei nº 13.005/2014. Estas publicações fazem parte de um conjunto de ações realizadas pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), voltadas à produção e disseminação de informações e a estudos direcionados a subsidiar o monitoramento do PNE, bem como à formulação, implementação e avaliação de políticas públicas na área da educação.
+O Ministério da Educação publicou o 1º, 2º, 3º e 4º Relatórios referentes aos ciclos de monitoramento das metas do PNE: biênio 2014-2016, 2016-2018 e 2008-2020, exercendo, assim, sua atribuição de publicar, a cada dois anos, estudos para aferir o cumprimento das metas estabelecidas no PNE, conforme determina a Lei nº 13.005/2014. Estas publicações fazem parte de um conjunto de ações realizadas pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), voltadas à produção e disseminação de informações e a estudos direcionados a subsidiar o monitoramento do PNE, bem como à formulação, implementação e avaliação de políticas públicas na área da educação.
 
-Apesar de importantes, os relatórios de monitoramento do INEP consolidam os resultados dos estados, por região e nacional, não estando disponívies análise em nível municipal. Diante disso, este trabalho pretende seguir a mesma metodologia utilizado pelo INEP e propor uma metodologia que permita a análise dos indicadores do PNE em nível municipa.
+Apesar de importantes, os relatórios de monitoramento do INEP consolidam os resultados dos estados, por região e, em nível nacional, não estando disponíveis dados e análises em nível municipal. Diante disso, este trabalho propõe uma metodologia que permita gerar dados para serem utilizados no monitoramento das metas do PNE em nível municipal. 
 
-Como estudo de caso, pretende-se calcular os indicadores do PNE para a a Microrregião de Itacoatiara, composta pelos municípios de Itacoatiara, Itapiranga, Nova Olinda do Norte, Silves e Urucurituba, que fazem parte da Mesorregião denominada de Centro Amazonense, correspondendo a uma população de 177.387 habitante (IBGE, 2018), baseando-se no que nisto o objetivo geral deste trabalho é Realizar o monitoramento das metas estabelecidas
-nos Planos Municipais de Educação nos municípios de Itacoatiara, Itapiranga, Nova Olinda do Norte, Silves e Urucurituba, que formam a microrregião de Itacoatiara, levando em consideração a importância de conhecer a realidade educacional desta microrregião e apresenta-la para a sociedade.
+Este artigo apresenta os resultados parciais da metodologia proposta para a metas 1, 2 e 3 do Plano Nacional de Educação e apresenta sua aplicação em municípios da Região Norte do Brasil.
+
+## Os desafios do monitoramento de políticas públicas e a geração de dados abertos
+
+O mundo vive um momento sem precedentes na geração de dados. Se por um lado isso é verdade, é importante que seja salientado em que contexto isso acontece. A cada acesso à rede mundial de computadores, milhares de informação são geradas. As questões postas são: quem tem acesso a esses dados? quem domina as tecnologias necessárias para "raspagem" dos dados disponíveis na internet? Já no contexto dos dados governamentais e da política dos dados abertos, há questões semelhantes, mas os desafios são outros. Se a geração, coleta e análise de dados por empresas privadas tem como o objetivos o crescimentos de seus negócios e, portanto, o acesso a esses dados é estratégico para seu o aumento em seu faturamento, o que justifica o investimento em tecnologias e pessoas qualificadas, no setor público, o tardio processo de informatização e, a mais atrasada disponibilização de dados na internet, coloca em cheque as tentativas de estudo, monitoramento e fiscalização de políticas públicas.
+
+Há poucas exceções a essa regra. O Instituto Brasileiro de Geografia e Estatística (IBGE) é, por vovação, pioneiro na disponibilização de dados. Destaca-se, também, o Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP). Estes dois órgãos geram grandes volumes de dados e produzem vários estudos disponibilizados em seus sítios na internet. No caso específico do Plano Nacional de Educação, o INEP disponibiliza os seguintes estudos:
+
+* Linha de Base | Plano Nacional de Educação: 2014 – 2024
+* Relatório do 1º Ciclo de Monitoramento de Metas do PNE: Biênio 2014 – 2016
+* Relatório do 2º Ciclo de Monitoramento de Metas do PNE: 2018
+* Relatório do 3º Ciclo de Monitoramento de Metas do PNE: 2020 
+* Relatório do 4º Ciclo de Monitoramento de Metas do PNE: 2022
+
+Estes relatórios estão disponíveis em <https://www.gov.br/inep/pt-br/areas-de-atuacao/gestao-do-conhecimento-e-estudos-educacionais/estudos-educacionais/relatorios-de-monitoramento-do-pne>
+
+Além desses relatórios, há disponíveis os seguintes painéis de monitoramento:
+
+* Painel de Monitoramento do PNE disponível, disponível em <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/inep-data/painel-de-monitoramento-do-pne>
+
+* PNE em Movimento, disponível em <http://simec.mec.gov.br/pde/grafico_pne.php>
+
+Segundo informações disponível no site, o *Painel de Monitoramento do Plano Nacional de Educação (PNE)* reúne gráficos e tabelas, com desagregações por regiões, unidades da Federação e perfis socioeconômicos das 20 metas do PNE em uma interface amigável para o usuário. Os dados são atualizados a cada dois anos, de acordo com a conclusão dos relatórios dos ciclos de monitoramento das metas, atribuição do INEP, conforme a Lei do PNE. Já o *PNE em Movimento* tenta avançar no mesmo escopo desse trabalho e apresenta resultados desagregados até o nível municipal para as 20 metas do PNE para o ano de 2014.
+
+Apesar de importantes, tanto os relatórios, quanto os painéis disponíveis assumem um papel fundamental, principalmente aos formuladores de políticas púbicas e aos gestores em geral, mas de forma alguma esgotam o potencial de análise. Há uma infinidade de possibilidades de conhecimento a serem gerados, desde que estes dados estejam disponíveis. A ferramenta que mais se aproxima em direção ao geração de conhecimento, a partir de uma base de dados estruturados, é o *PNE em Movimento*. Entretanto, os dados utilizados na geração do painel nem estão disponível, nem a metodologia utilizada. A metodologia utilizada diz respeito tecnicas utilizadas na geração de dados agregados em nível de estado e região, visto que mencionam a PNAD, o que não permite análise de dados desagregados em nível municipal.
+
+Este trabalho pretende suprir esta lacuna ao propor uma metodologia que permita, mesma com todas as limitações dos dados abertos, estimar os dados em nível municipal e, a partir deles, permitir que seja feita o monitoramento dos indicaadores do PNE numa perspectiva espaço-tempora.
 
 
-## 2) corpo de trabalho: discussões práticas sobre experiências relacionadas a mecanismos de acesso à informação e recomendações para melhor desenho, implementação e avaliação de políticas; 
-
-`r lorem::ipsum(4, avg_words_per_sentence = 20)`
- 
 ## 3) Recomendações: diretrizes práticas para casos semelhantes, ajustes necessários na legislação, políticas e arranjos, diretrizes para inovação, etc; 
 
-`r lorem::ipsum(4, avg_words_per_sentence = 20)`
 
 ## 4) referências: lista de documentos, relatórios, regulamentos, bibliografia e demais referências citadas.
 
-`r lorem::ipsum(1, avg_words_per_sentence = 20)`
+
+Referências:
+
+<https://www.gov.br/inep/pt-br/areas-de-atuacao/gestao-do-conhecimento-e-estudos-educacionais/estudos-educacionais/relatorios-de-monitoramento-do-pne>
