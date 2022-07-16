@@ -61,12 +61,32 @@ Além desses relatórios, há disponíveis os seguintes painéis de monitorament
 
 Segundo informações disponível no site, o *Painel de Monitoramento do Plano Nacional de Educação (PNE)* reúne gráficos e tabelas, com desagregações por regiões, unidades da Federação e perfis socioeconômicos das 20 metas do PNE em uma interface amigável para o usuário. Os dados são atualizados a cada dois anos, de acordo com a conclusão dos relatórios dos ciclos de monitoramento das metas, atribuição do INEP, conforme a Lei do PNE. Já o *PNE em Movimento* tenta avançar no mesmo escopo desse trabalho e apresenta resultados desagregados até o nível municipal para as 20 metas do PNE para o ano de 2014.
 
-Apesar de importantes, tanto os relatórios, quanto os painéis disponíveis assumem um papel fundamental, principalmente aos formuladores de políticas púbicas e aos gestores em geral, mas de forma alguma esgotam o potencial de análise. Há uma infinidade de possibilidades de conhecimento a serem gerados, desde que estes dados estejam disponíveis. A ferramenta que mais se aproxima em direção ao geração de conhecimento, a partir de uma base de dados estruturados, é o *PNE em Movimento*. Entretanto, os dados utilizados na geração do painel nem estão disponível, nem a metodologia utilizada. A metodologia utilizada diz respeito tecnicas utilizadas na geração de dados agregados em nível de estado e região, visto que mencionam a PNAD, o que não permite análise de dados desagregados em nível municipal.
+Apesar de importantes, tanto os relatórios, quanto os painéis disponíveis assumem um papel fundamental, principalmente aos formuladores de políticas púbicas e aos gestores em geral, mas de forma alguma esgotam o potencial de análise. Há uma infinidade de possibilidades de conhecimento a serem gerados, desde que estes dados estejam disponíveis. A ferramenta que mais se aproxima em direção à geração de conhecimento, a partir de uma base de dados estruturados, é o *PNE em Movimento*. Entretanto, os dados utilizados no painel nem estão disponível, nem a metodologia utilizada. A metodologia utilizada diz respeito tecnicas utilizadas na geração de dados agregados em nível de estado e região, visto que mencionam a PNAD, o que não permite análise de dados desagregados em nível municipal.
 
 Este trabalho pretende suprir esta lacuna ao propor uma metodologia que permita, mesma com todas as limitações dos dados abertos, estimar os dados em nível municipal e, a partir deles, permitir que seja feita o monitoramento dos indicaadores do PNE numa perspectiva espaço-tempora.
 
 
 ## 3) Recomendações: diretrizes práticas para casos semelhantes, ajustes necessários na legislação, políticas e arranjos, diretrizes para inovação, etc; 
+
+Estimar indicadores desagregados tem seus desafios. No caso específicos dos indicadores associados ao Plano Nacional de Educação, eles ocorrem em várias dimensões, seja no tempo ou no espaço. Os dados censitários, sejam eles educativos, mas, principalemente populacionais, requerem um tratamento que possibile interpolar os dados anuais não coletados. Como os dados do Censo Escolar são coletados regularmente e mantém uma certa estabilidade metodológca, nos deteremos, neste primeiro momento, em detalhar a metodologia utilizadas para etimar os dados populacionais necesáriaos a esse pesquisa.
+
+Para atender ao objetivos deste projeto, são neessários os dados desagregados por *município* e, pelo que o IBGE chama de *idade simples*, conceito que será detalhado oportunamente. Em termos da popução dos municípios ao longo do anos, o IBGE divulga, regularmente as estimativas populacionas dos municípios brasileiros. Apesar de fundamental, estas estimativas não são suficientes. O Plano Nacional de Educação estabele metas por faixa etária, ou seja, mais do que saber a populacão de um determinado município, é condição necessária, saber a total de uma popuação de um determinado município *m*, em ano ano *t*, desagregado por idades *i*. Entretanto, só há esta distribuição para no ano de 2010, data do último censo.
+
+Portanto, para estimar a população dos municípios brasileiros desagregados por idade, utilizou os dados do Censo Populacional de 2010, a partir do qual calculou-se as taxas utilizadas para estimar as *idades simples* para todos os municípios brasileiros, nos anos de interesse.
+
+
+$$t_{i, m}=\frac{p_{i,m}}{p_{m}},i = 0,...,100, m=1,...5.568$$
+onde $p_{i,m}$ é o total de pessoas com a idade *i*, do município $m$, $p_{m}$ é a população total do município $m$ e, $t_{i,m}$ é a taxa que será usada na estimativa das idades dimples para o período intercensiário. A estimativa das *idades simples* foi calculada descrito, a seguir: 
+
+$$i_{i,a,m} = p_{i,a,m}*t_{i,m}$$
+
+onde $i_{i,a,m}$ é a estimativa da *idade simples* $i$, no ano $a$, no município $m$, necessárias para a criação das faixas etárias utilizadas no cálculos de vários indicadores do PNE. 
+
+Os dados utilizados na estimativa das *idades simples* foram obtidos nas seguintes fontes:
+
+* População de referência - Tabela 1552, gerada pelo Sistema SIDRA/IBGE e que contém a contagem da popuçação desagregada por idade (CENSO - 2010);
+
+* Projeção da População Brasileira por Município - Segundo informações disponíveis no site do IBGE, as estimativas de população publicadas anualmente são calculadas aplicando-se o método matemático desenvolvido, em 1972, por João Lira Madeira e Celso Cardoso da Silva Simões, denominado AiBi. Esse método utiliza como insumos básicos as populações obtidas das Projeções da População para o Brasil e as Unidades da Federação mais recentes, bem como o crescimento populacional de cada Município na última década, delineado pelas respectivas populações recenseadas nos dois últimos Censos Demográficos realizados. Essas populações recenseadas, que servem de base para o cálculo da tendência de crescimento populacional dos Municípios, podem ser ajustadas em consonância com os ajustes da população adotados nas Projeções da População para o Brasil e as Unidades da Federação.
 
 
 ## 4) referências: lista de documentos, relatórios, regulamentos, bibliografia e demais referências citadas.
