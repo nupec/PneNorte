@@ -12,7 +12,8 @@ variaveis_selecionadas_1314 <- c("ANO_CENSO",
                                  "ID_DEPENDENCIA_ADM_ESC",
                                  "FK_COD_ETAPA_ENSINO",
                                  "FK_COD_ESTADO_ESCOLA",
-                                 "COD_MUNICIPIO_ESCOLA")
+                                 "COD_MUNICIPIO_ESCOLA",
+                                 )
 
 
 variaveis_selecionadas_1520 <- c("NU_ANO_CENSO",
@@ -20,7 +21,10 @@ variaveis_selecionadas_1520 <- c("NU_ANO_CENSO",
                                  "TP_DEPENDENCIA",
                                  "TP_ETAPA_ENSINO",
                                  "CO_UF",
-                                 "CO_MUNICIPIO")
+                                 "CO_MUNICIPIO",
+                                 "IN_ESPECIAL_EXCLUSIVA",
+                                 "IN_NECESSIDADE_ESPECIAL",
+                                 "IN_ESPECIAL_EXCLUSIVA")
 
 ## Nesta etapa, eu aponto os caminhos das bases de dados
 arq_matriculas_no_1314 <-list.files("data-raw/2013_2014/",
@@ -60,73 +64,73 @@ readr::write_rds(matriculas_no_1320, file = "data/matricula1320.rds")
 
 # Importando a amostra da matricula
 
-matriculas_no_1320 <- readr::read_rds("data/amostra_dados.rds")
-
-#  Populacao de 0 a 3 anos
-
-qtde0a3 <- estimativas_por_idade |>
-  dplyr::filter(Faixa_Etaria=="0 a 3 anos") |>
-  #    dplyr::group_by(Faixa_Etaria) |>
-    dplyr::summarise(
-    Populacao = sum(`2015`)) |>
-    as.numeric()
-
-# Matricula de 0 a 3 anos
-
-matricula0a3 <- matriculas_no_1320 |>
-  dplyr::filter(NU_ANO_CENSO == ano2) |>
-  dplyr::filter(TP_ETAPA_ENSINO == 1) |>
-  dplyr::count(TP_ETAPA_ENSINO)
-
-matricula0a3 <- matricula0a3$n |> sum()
-
-# Calculando o indicador 1B
-
-indicador_1B = round(matricula0a3/qtde0a3,4)*100
-
-
-mensagem1 <- paste0("O indicador 1B, da Meta 1 do Plano Nacional de Educação do",
-                    " município ", cidade2, ", que mede o percetual",
-                    " de crianças de 0 a 3 anos matriculados",
-                    " em creches é de ", indicador_1B, "%.")
-
-print(mensagem1)
-
-# Meta 1: Indicador 1A
-
-#  Populacao de 4 a 5 anos
-
-qtde4a5 <- estimativas_por_idade |>
-  dplyr::filter(Faixa_Etaria=="4 a 5 anos") |>
-  #    dplyr::group_by(Faixa_Etaria) |>
-  dplyr::summarise(
-    Populacao = sum(`2015`)
-  ) |> as.numeric()
-
-# Matricula de 4 a 5 anos
-
-matricula4a5 <- matriculas_no_1320 |>
-  dplyr::filter(NU_ANO_CENSO == ano2) |>
-  dplyr::filter(TP_ETAPA_ENSINO == 2) |>
-  dplyr::count(TP_ETAPA_ENSINO)
-
-matricula4a5 <- matricula4a5$n |> sum()
-
-
-indicador_1A <- matricula4a5/qtde4a5*100
-
-mensagem2 <- paste0("O indicador 1A, da Meta 1 do Plano Nacional de Educação do",
-                    " município ", cidade2, " que mede o percetual",
-                    " de crianças de 4 a 5 anos matriculados",
-                    " em creches é de ", round(indicador_1A, 2), "%.")
-
-print(mensagem2)
-
-
-Meta_1 <- (matricula0a3 + matricula4a5)/(qtde0a3  + qtde4a5)
-
-mensagem3 <- paste0("O município de ", cidade2, " alcançou ",
-                    round(Meta_1, 2), "% referente à Meta 1 do Plano Nacional de Educação",
-                    " no ano de ", ano2)
-
-print(mensagem3)
+# matriculas_no_1320 <- readr::read_rds("data/amostra_dados.rds")
+#
+# #  Populacao de 0 a 3 anos
+#
+# qtde0a3 <- estimativas_por_idade |>
+#   dplyr::filter(Faixa_Etaria=="0 a 3 anos") |>
+#   #    dplyr::group_by(Faixa_Etaria) |>
+#     dplyr::summarise(
+#     Populacao = sum(`2015`)) |>
+#     as.numeric()
+#
+# # Matricula de 0 a 3 anos
+#
+# matricula0a3 <- matriculas_no_1320 |>
+#   dplyr::filter(NU_ANO_CENSO == ano2) |>
+#   dplyr::filter(TP_ETAPA_ENSINO == 1) |>
+#   dplyr::count(TP_ETAPA_ENSINO)
+#
+# matricula0a3 <- matricula0a3$n |> sum()
+#
+# # Calculando o indicador 1B
+#
+# indicador_1B = round(matricula0a3/qtde0a3,4)*100
+#
+#
+# mensagem1 <- paste0("O indicador 1B, da Meta 1 do Plano Nacional de Educação do",
+#                     " município ", cidade2, ", que mede o percetual",
+#                     " de crianças de 0 a 3 anos matriculados",
+#                     " em creches é de ", indicador_1B, "%.")
+#
+# print(mensagem1)
+#
+# # Meta 1: Indicador 1A
+#
+# #  Populacao de 4 a 5 anos
+#
+# qtde4a5 <- estimativas_por_idade |>
+#   dplyr::filter(Faixa_Etaria=="4 a 5 anos") |>
+#   #    dplyr::group_by(Faixa_Etaria) |>
+#   dplyr::summarise(
+#     Populacao = sum(`2015`)
+#   ) |> as.numeric()
+#
+# # Matricula de 4 a 5 anos
+#
+# matricula4a5 <- matriculas_no_1320 |>
+#   dplyr::filter(NU_ANO_CENSO == ano2) |>
+#   dplyr::filter(TP_ETAPA_ENSINO == 2) |>
+#   dplyr::count(TP_ETAPA_ENSINO)
+#
+# matricula4a5 <- matricula4a5$n |> sum()
+#
+#
+# indicador_1A <- matricula4a5/qtde4a5*100
+#
+# mensagem2 <- paste0("O indicador 1A, da Meta 1 do Plano Nacional de Educação do",
+#                     " município ", cidade2, " que mede o percetual",
+#                     " de crianças de 4 a 5 anos matriculados",
+#                     " em creches é de ", round(indicador_1A, 2), "%.")
+#
+# print(mensagem2)
+#
+#
+# Meta_1 <- (matricula0a3 + matricula4a5)/(qtde0a3  + qtde4a5)
+#
+# mensagem3 <- paste0("O município de ", cidade2, " alcançou ",
+#                     round(Meta_1, 2), "% referente à Meta 1 do Plano Nacional de Educação",
+#                     " no ano de ", ano2)
+#
+# print(mensagem3)
