@@ -1,0 +1,496 @@
+---
+title: "**Monitoramento das Metas do Plano Nacional de Educação nos Municípios da Região Norte**"
+subtitle: "Monitoring the Goals of the National Education Plan in the Municipalities of the North Region"
+author: "Núcleo de Pesquisa em Ciência de Dados e Otimização - NUPEC"
+date: "`r format(Sys.Date(), format='%d/%m/%Y')`"
+output:
+  rmdformats::downcute:
+   code_folding: hide
+   self_contained: true
+   thumbnails: false
+   lightbox: true
+   gallery: false
+   highlight: pygments
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+  
+Hidelbrando Ferreira Rodrigues, Augusto Sousa da Silva Filho, Marco André Santos Machado, Júlio César Loureiro Dilahar.
+
+[![Imagem: s2.glbimg.com](https://s2.glbimg.com/8bLSkFHMy2Ay8YCq-PUCuqdsLOs=/620x350/e.glbimg.com/og/ed/f/original/2018/10/11/advice-business-colleagues-1161465.jpg)](https://www.nytimes.com/guides/well/healthy-eating-for-runners)
+
+```{r setup, echo = FALSE, warning = FALSE, include = FALSE, warnings=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, fig.align = "center")
+library(ggplot2)
+library(DT)
+library(corrplot)
+library(tidyverse)
+library(knitr)
+library(plotly)
+library(patchwork)
+library(skimr)
+library(tidymodels)
+library(outliers)
+
+```
+
+## **Resumo**  
+
+O objetivo deste trabalho é calcular os indicadores educacionais das metas 1, 2 e 3 do Plano Nacional de Educação (PNE) e monitorar ao longo do tempo o comportamento desses índices a nível municipal, com relação ao percentual de interesse descrito em cada uma das metas do plano. Para isto, primordialmente é feita uma  reflexão sobre o modo como baixar e tratar as bases de dados educacionais e populacionais. Visto que não existe publicações atualizadas do censo demográfico, faz-se necessário o uso de estimativas populacionais desagragadas por idade e por município ao longo do período de interesse. Após a apresentação das comparações entre os indicadores, são discutidas formas de aumentar os índices que estão abaixo do percentual almejado.  
+
+**Palavras-chave:**  
+
+**Plano Nacional de Eduação, Indicadores educacionais, Políticas Públicas, Educação**  
+
+### **Abstract**
+
+The objective is to calculate the work indicators and 3 of the National Education Plan (PNE) and the interest over time in the behavior of these indices at the municipal level, in relation to the percentage of description in one of the goals to make plan. For this, primarily a reflection is made on how to download and treat educational and population databases. Since there are no updated municipal census dates of interest, if necessary the use of population estimates and data aggregated by disaggregated municipalities over the period of interest. After presenting the comparisons between the indicators, ways to increase the indices that are below the target are presented.  
+
+**Keywords:**  
+
+**National Education Plan, Educational Indicators, Public Policies, Education**  
+
+## **1. Introdução**
+
+A busca pela universalização do acesso à educação e da melhoria da qualidade de ensino é uma meta perseguida pela sociedade brasileira há bastante tempo. Nesta direção, o Plano Nacional de Educação (PNE), aprovado pela Lei 13.005/2014, e com vigência entre 2014 e 2024, constitui um marco fundamental nas políticas públicas educacionais brasileiras. O PNE possui 20 metas e conferem ao País um horizonte para o qual os esforços dos entes federativos e da sociedade civil devem convergir com a finalidade de consolidar um sistema educacional capaz de concretizar o direito à educação em sua integralidade, dissolvendo as barreiras para o acesso e a permanência, reduzindo as desigualdades, promovendo os direitos humanos e garantindo a formação para o trabalho e para o exercício autônomo da cidadania (BRASIL, 2014, 2015).
+
+O PNE possui metas estruturantes, que visam a garantia do direito à educação básica com qualidade, que dizem respeito ao acesso, à universalização da alfabetização e à ampliação da escolaridade e das oportunidades educacionais, metas com vistas à redução das desigualdades e à valorização da diversidade, e metas para a valorização dos profissionais da educação, considerada estratégica para que as metas anteriores sejam atingidas.
+
+O Ministério da Educação publicou o 1º, 2º e 3º Relatórios referentes aos ciclos de monitoramento das metas do PNE: biênio 2014-2016, 2016-2018 e 2008-2020, exercendo, assim, sua atribuição de publicar, a cada dois anos, estudos para aferir o cumprimento das metas estabelecidas no PNE, conforme determina a Lei nº 13.005/2014. Estas publicações fazem parte de um conjunto de ações realizadas pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), voltadas à produção e disseminação de informações e a estudos direcionados a subsidiar o monitoramento do PNE, bem como à formulação, implementação e avaliação de políticas públicas na área da educação.
+
+Apesar de importantes, os relatórios de monitoramento do INEP consolidam os resultados dos estados, por região e nacional, não estando disponívies análise em nível municipal. Diante disso, este trabalho pretende seguir a mesma metodologia utilizado pelo INEP e propor uma metodologia que permita a análise dos indicadores do PNE em nível municipal.
+
+Inicialmente, tem-se por finalidade realizar o cálculo dos indicadores das metas 1, 2 e 3 do Plano Nacional de Educação a nível municipal, com ênfase na região norte do Brasil. E diante dos resultados parciais desta análise, podemos realizar o monitoramento das metas estabelecidas e posteriormente espelhar seu tratamento para as demais metas presentes no PNE, mas que serão tratadas futuramente. Logo, enfatiza-se a necessidade de reconhecer e identificar a realidade educacional das microrregiões e apresenta-las para a sociedade, para que haja o direcionamento correto de politicas públicas favoráveis à melhoria na educação.
+
+O Painel de Monitoramento do PNE pode ser acessado em: <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/inep-data/painel-de-monitoramento-do-pne>  
+
+## **2. Objetivos**
+
+### Objetivo Geral: 
+
+Analisar a evolução temporal da Meta 1, 2 e 3 do Plano Nacional de Educação (PNE) para todos os municípios da Região Norte.  
+
+## **3. Metodologia**  
+
+### **3.1 Tratamento das bases de dados e Pré-processamento**  
+
+Estimar indicadores desagregados tem seus desafios. No caso específicos dos indicadores associados ao Plano Nacional de Educação, eles ocorrem em várias dimensões, seja no tempo ou no espaço. Os dados censitários, sejam eles educativos, mas, principalemente populacionais, requerem um tratamento que possibile interpolar os dados anuais não coletados. Como os dados do Censo Escolar são coletados regularmente e mantém uma certa estabilidade metodológca, nos deteremos, neste primeiro momento, em detalhar a metodologia utilizadas para etimar os dados populacionais necesáriaos a esse pesquisa.
+
+Para atender ao objetivos deste projeto, são neessários os dados desagregados por *município* e, pelo que o IBGE chama de *idade simples*, conceito que será detalhado oportunamente. Em termos da popução dos municípios ao longo do anos, o IBGE divulga, regularmente as estimativas populacionas dos municípios brasileiros. Apesar de fundamental, estas estimativas não são suficientes. O Plano Nacional de Educação estabele metas por faixa etária, ou seja, mais do que saber a populacão de um determinado município, é condição necessária, saber a total de uma popuação de um determinado município *m*, em ano ano *t*, desagregado por idades *i*. Entretanto, só há esta distribuição para no ano de 2010, data do último censo.
+
+Portanto, para estimar a população dos municípios brasileiros desagregados por idade, utilizou os dados do Censo Populacional de 2010, a partir do qual calculou-se as taxas utilizadas para estimar as *idades simples* para todos os municípios brasileiros, nos anos de interesse.
+
+
+$$p_{i}=\frac{t_{i}}{p_{a}}, i = 0,...,100, a=1,...5.568$$
+onde $t_{i}$ é o total de pessoas com a idade *i*, de 0 a 100 anos e, $p_{a}$, é a população dos 5.568 municípios brasileiros e o Distrito Federal, no ano de 2010. A partir do indicador $p_{i}$, foram estimadas as *idade simples* para os anos intercensitários.  
+
+
+  
+## **4. Meta 1: Cálculo, Resultados e Discussão**
+
+Meta 1: Universalizar, até 2016, a educação infantil na pré-escola para as crianças de 4 (quatro) a # 5 (cinco) anos de idade e ampliar a oferta de educação infantil em creches de forma a atender, # no mínimo, 50% (cinquenta por cento) das crianças de até 3 (três) anos até o final da vigência # deste PNE.
+
+Objetivos Especiíficos
+ 
+1) Calcular o indicador 1A: Percentual da população de 4 e 5 anos que frequenta a escola
+
+
+
+2) Calcular o indicador 1B: Percentual da população de 0 a 3 anos que frequenta a escola
+
+
+
+```{r}
+meta1 <- readr::read_rds("data/Meta1.rds") |> 
+  dplyr::mutate(ano = as.numeric(ano)) |> 
+  dplyr::filter(nome_regiao == "Norte") |> 
+  tidyr::drop_na()
+```
+A região norte do Brasil possui 7 estados e 450 municípios. 
+
+
+### EDA
+
+
+```{r include=FALSE}
+
+a <- meta1 |> 
+  dplyr::select(indicador1b, indicador1a)
+```
+
+
+```{r include=FALSE}
+a |> skim()
+
+
+GGally::ggpairs(a)
+```
+
+### Estatísticas Básicas
+
+```{r}
+meta1 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(across(
+    .cols = indicador1b,
+    .fns = list(minino_ = min, 
+                mediana_= median, 
+                media_  = mean,
+                maximo_ = max,
+                dp_ = sd
+                )
+  )) |> 
+  round(3) |> 
+  DT::datatable()
+```
+
+### Valores atípicos
+
+```{r}
+ meta1 |> 
+  dplyr::group_by(ano, nome_uf) |> 
+  dplyr::summarise(
+    media1b = round(mean(indicador1b), 2)
+  ) |> 
+  ggplot() +
+  geom_boxplot(aes(x= media1b, y = nome_uf)) + 
+  labs(
+    x = "Anos",
+    y = "Indicador 1B",
+    color = "Lucro ($)",
+    title = "Percentual da população de 0 a 3 anos que frequenta a escola, ",
+    subtitle = "Indicador 1B"
+  ) +
+  theme_bw()+
+  coord_flip()
+```
+  
+### Análise Temporal
+
+```{r}
+meta1 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(
+    media1b = round(mean(indicador1b), 2)
+  ) |> 
+  ggplot(aes(x=ano, y=media1b)) +
+  geom_line() + 
+  geom_label(aes(label = media1b)) +
+  scale_x_continuous(breaks = seq(2014, 2020, 1)) + 
+  coord_cartesian(ylim = c(0,1)) +
+  geom_abline(intercept = 0.5, slope = 0, color = "red")+
+  labs(
+    x = "Anos",
+    y = "Indicador 1B",
+    color = "Lucro ($)",
+    title = "PNE - Média Geral dos Resultado Obtidos pelos Municípios da Região Norte",
+    subtitle = "Indicador 1B"
+  ) +
+  theme_bw()
+  
+```
+
+
+
+```{r}
+meta1 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(
+    media1a = round(mean(indicador1a), 2)
+  ) |> 
+  ggplot(aes(x=ano, y=media1a)) +
+  geom_line() + 
+  geom_label(aes(label = media1a)) +
+  scale_x_continuous(breaks = seq(2014, 2020, 1)) + 
+  coord_cartesian(ylim = c(0,1)) +
+  geom_abline(intercept = 1, slope = 0, color = "red")+
+  labs(
+    x = "Anos",
+    y = "Indicador 1A",
+    color = "Lucro ($)",
+    title = "PNE - Média Geral dos Resultado Obtidos pelos Municípios da Região Norte",
+    subtitle = "Indicador 1A"
+  ) +
+  theme_bw()
+```
+
+
+## **5. Meta 2: Cálculo, Resultados e Discussão**
+
+Meta 2: Universalizar o ensino fundamental de 9 (nove) anos para toda a
+população de 6 (seis) a 14 (quatorze) anos e garantir que pelo menos 95%
+(noventa e cinco por cento) dos alunos concluam essa etapa na idade recomendada,
+até o último ano de vigência deste PNE.
+
+Indicador 2A: Percentual de pessoas de 6 a 14 anos que frequentam ou que já concluíram
+o ensino fundamental (taxa de escolarização líquida ajustada).
+
+Indicador 2B: Percentual de pessoas de 16 anos com pelo menos o ensino fundamental
+concluído.
+
+
+
+```{r}
+meta2 <- readr::read_rds("data/Meta2.rds") |> 
+  dplyr::mutate(ano = as.numeric(ano)) |> 
+  tidyr::drop_na()
+```
+A região norte do Brasil possui 7 estados e 450 municípios. 
+
+
+### EDA
+
+
+```{r include=FALSE}
+
+b <- meta2 |> 
+  dplyr::select(indicador2B, indicador2B)
+```
+
+
+```{r include=FALSE}
+b |> skim()
+
+
+GGally::ggpairs(b)
+```
+
+### Estatísticas Básicas
+
+```{r}
+meta2 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(across(
+    .cols = indicador2B,
+    .fns = list(minino_ = min, 
+                mediana_= median, 
+                media_  = mean,
+                maximo_ = max,
+                dp_ = sd
+                )
+  )) |> 
+  round(3) |> 
+  DT::datatable()
+```
+
+### Valores atípicos
+
+```{r}
+ meta2 |> 
+  dplyr::group_by(ano, codigo_municipio) |> 
+  dplyr::summarise(
+    media2b = round(mean(indicador2B), 2)
+  ) |> 
+  ggplot() +
+  geom_boxplot(aes(x= media2b, y = codigo_municipio)) + 
+  labs(
+    x = "Anos",
+    y = "Indicador 2B",
+    color = "Lucro ($)",
+    title = "Percentual de pessoas de 6 a 14 anos que frequentam ou que já concluíram
+o ensino fundamental (taxa de escolarização líquida ajustada)",
+    subtitle = "Indicador 2B"
+  ) +
+  theme_bw()+
+  coord_flip()
+```
+  
+### Análise Temporal
+
+```{r}
+meta2 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(
+    media2b = round(mean(indicador2B), 2)
+  ) |> 
+  ggplot(aes(x=ano, y=media2b)) +
+  geom_line() + 
+  geom_label(aes(label = media2b)) +
+  scale_x_continuous(breaks = seq(2014, 2020, 1)) + 
+  coord_cartesian(ylim = c(0,1)) +
+  geom_abline(intercept = 0.95, slope = 0, color = "red")+
+  labs(
+    x = "Anos",
+    y = "Indicador 2B",
+    color = "Lucro ($)",
+    title = "PNE - Média Geral dos Resultado Obtidos pelos Municípios da Região Norte",
+    subtitle = "Indicador 2B"
+  ) +
+  theme_bw()
+  
+```
+
+
+
+```{r}
+meta2 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(
+    media2a = round(mean(indicador2A), 2)
+  ) |> 
+  ggplot(aes(x=ano, y=media2a)) +
+  geom_line() + 
+  geom_label(aes(label = media2a)) +
+  scale_x_continuous(breaks = seq(2014, 2020, 1)) + 
+  coord_cartesian(ylim = c(0,1)) +
+  geom_abline(intercept = 1, slope = 0, color = "red")+
+  labs(
+    x = "Anos",
+    y = "Indicador 2A",
+    color = "Lucro ($)",
+    title = "PNE - Média Geral dos Resultado Obtidos pelos Municípios da Região Norte",
+    subtitle = "Indicador 2A"
+  ) +
+  theme_bw()
+```
+
+
+## **6. Meta 3: Cálculo, Resultados e Discussão**
+
+Meta 3: Universalizar, até 2016, o atendimento escolar para toda a população de 15
+(quinze) a 17 (dezessete) anos e elevar, até o final do período de vigência deste
+PNE, a taxa líquida de matrículas no ensino médio para 85% (oitenta e cinco por cento).
+
+Indicador 3A: Percentual da população de 15 a 17 anos que frequenta a escola ou já concluiu
+a educação básica.
+
+Indicador 3B: Percentual da população de 15 a 17 anos que frequenta o ensino médio ou
+possui educação básica completa.
+
+
+
+```{r}
+
+meta3 <- readr::read_rds("data/Meta3.rds") |> 
+  dplyr::mutate(ano = as.numeric(ano)) |> 
+  tidyr::drop_na()
+```
+A região norte do Brasil possui 7 estados e 450 municípios. 
+
+
+### EDA
+
+
+```{r include=FALSE}
+
+c <- meta3 |> 
+  dplyr::select(indicador3B, indicador3A)
+```
+
+
+```{r include=FALSE}
+c |> skim()
+
+
+GGally::ggpairs(c)
+```
+
+### Estatísticas Básicas
+
+```{r}
+meta3 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(across(
+    .cols = indicador3B,
+    .fns = list(minino_ = min, 
+                mediana_= median, 
+                media_  = mean,
+                maximo_ = max,
+                dp_ = sd
+                )
+  )) |> 
+  round(3) |> 
+  DT::datatable()
+```
+
+### Valores atípicos
+
+```{r}
+ meta3 |> 
+  dplyr::group_by(ano, nome_municipio) |> 
+  dplyr::summarise(
+    media3b = round(mean(indicador3B), 2)
+  ) |> 
+  ggplot() +
+  geom_boxplot(aes(x= media3b, y = nome_municipio)) + 
+  labs(
+    x = "Anos",
+    y = "Indicador 3B",
+    color = "Lucro ($)",
+    title = "Percentual da população de 15 a 17 anos que frequenta o ensino médio ou
+possui educação básica completa.",
+    subtitle = "Indicador 3B"
+  ) +
+  theme_bw()+
+  coord_flip()
+```
+  
+### Análise Temporal
+
+```{r}
+meta3 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(
+    media3b = round(mean(indicador3B), 2)
+  ) |> 
+  ggplot(aes(x=ano, y=media3b)) +
+  geom_line() + 
+  geom_label(aes(label = media3b)) +
+  scale_x_continuous(breaks = seq(2014, 2020, 1)) + 
+  coord_cartesian(ylim = c(0,1)) +
+  geom_abline(intercept = 0.85, slope = 0, color = "red")+
+  labs(
+    x = "Anos",
+    y = "Indicador 3B",
+    color = "Lucro ($)",
+    title = "PNE - Média Geral dos Resultado Obtidos pelos Municípios da Região Norte",
+    subtitle = "Indicador 3B"
+  ) +
+  theme_bw()
+  
+```
+
+
+
+```{r}
+meta3 |> 
+  dplyr::group_by(ano) |> 
+  dplyr::summarise(
+    media3a = round(mean(indicador3A), 2)
+  ) |> 
+  ggplot(aes(x=ano, y=media3a)) +
+  geom_line() + 
+  geom_label(aes(label = media3a)) +
+  scale_x_continuous(breaks = seq(2014, 2020, 1)) + 
+  coord_cartesian(ylim = c(0,1)) +
+  geom_abline(intercept = 1, slope = 0, color = "red")+
+  labs(
+    x = "Anos",
+    y = "Indicador 3A",
+    color = "Lucro ($)",
+    title = "PNE - Média Geral dos Resultado Obtidos pelos Municípios da Região Norte",
+    subtitle = "Indicador 3A"
+  ) +
+  theme_bw()
+```
+
+
+## **7. Considerações finais**
+
+O objetivo do trabalho foi atingido, uma vez que foi proposto o CIPM, contas julgadas irregulares pelo TCU por milhão de habitantes. As propriedades do indicador foram analisadas e a concluiu-se que o CIPM tem um bom conjunto de propriedades dese-jáveis. Todas as escolhas metodológicas foram con-sideradas e detalhadamente explicadas, para evitar incorrer em fraquezas de propostas anteriores. Foi feita a opção por um indicador simples, em vez dos indicadores compostos, predominantes tanto em in-dicadores subjetivos quanto objetivos de corrupção. Um indicador simples ou um sistema de indicadores, conforme defende Jannuzi (2005), é mais adequado para políticas públicas, por ser mais facilmente com-preendido por todos, do que indicadores compostos como o Índice de Percepção da Corrupção (IPC). Isto leva a uma primeira sugestão para trabalhos futuros, que é a construção de outro indicador de corrupção baseado no valor do débito das contas julgadas ir-regulares, o VDPM (valor do débito das contas jul-gadas irregulares pelo TCU por milhão de reais de PIB), para assim formar, juntamente com o CIPM, um sistema de indicadores, que podem servir para planejar e controlar políticas públicas de combate à corrupção. Neste trabalho foram calculados valores do CIPM apenas para os estados. Trabalhos posteriores poderão calcular os valores do CIPM para municí-pios, também baseados nas quantidades de contadas julgadas irregulares pelo TCU, uma vez que a base de dados o permite, o que leva à segunda sugestão para estudos posteriores. Finalmente o CIPM poderá ser usado para testar hipóteses sobre causas e conse-quências da corrupção, ao relacioná-lo com indica-dores, por exemplo, de educação (IDEB) ou desenvol-vimento humano (IDH), o que leva à terceira e última sugestão para trabalhos futuros.  
+  
+## **Referências**
+
+- Food carbon footprint index 2018: <br> 
+https://www.nu3.de/blogs/nutrition/food-carbon-footprint-index-2018
+
+- GitHub do #TidyTuesday: <br> https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-02-18
+
+- Webscraping with R - from messy & unstructured to blisfully tidy: <br>
+https://r-tastic.co.uk/post/from-messy-to-tidy/
+
+
+<div/>
+
+
