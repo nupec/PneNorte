@@ -1,0 +1,93 @@
+---
+title: "Untitled"
+author: "Hidelbrando F. Rodrigues"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Hidelbrando Ferreira Rodrigues, Augusto Sousa da Silva Filho, Marco André Santos Machado, Júlio
+
+## Resumo
+
+
+
+**Palavras-chave:** Palavra 1; Palavra 2; Palavra 3
+
+## Abstract
+
+
+**Keywords:** Word 1; Word 2; Word 3
+
+## Resumén
+
+
+**Palabras llave:** Palabra 1; Palabra 2; Palabra 3
+
+
+## 1) Introdução
+
+A busca pela universalização do acesso à educação e da melhoria da qualidade de ensino é uma meta perseguida pela sociedade brasileira há bastante tempo. Nesta direção, o Plano Nacional de Educação (PNE), aprovado pela Lei 13.005/2014, e com vigência entre 2014 e 2024, constitui um marco fundamental nas políticas públicas educacionais brasileiras. O PNE possui 20 metas e conferem ao País um horizonte para o qual os esforços dos entes federativos e da sociedade civil devem convergir com a finalidade de consolidar um sistema educacional capaz de concretizar o direito à educação em sua integralidade, dissolvendo as barreiras para o acesso e a permanência, reduzindo as desigualdades, promovendo os direitos humanos e garantindo a formação para o trabalho e para o exercício autônomo da cidadania (BRASIL, 2014, 2015).
+
+O PNE possui metas estruturantes, que visam a garantia do direito à educação básica com qualidade, que dizem respeito ao acesso, à universalização da alfabetização e à ampliação da escolaridade e das oportunidades educacionais, metas com vistas à redução das desigualdades e à valorização da diversidade, e metas para a valorização dos profissionais da educação, considerada estratégica para que as metas anteriores sejam atingidas.
+
+O Ministério da Educação publicou o 1º, 2º, 3º e 4º Relatórios referentes aos ciclos de monitoramento das metas do PNE: biênio 2014-2016, 2016-2018 e 2008-2020, exercendo, assim, sua atribuição de publicar, a cada dois anos, estudos para aferir o cumprimento das metas estabelecidas no PNE, conforme determina a Lei nº 13.005/2014. Estas publicações fazem parte de um conjunto de ações realizadas pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), voltadas à produção e disseminação de informações e a estudos direcionados a subsidiar o monitoramento do PNE, bem como à formulação, implementação e avaliação de políticas públicas na área da educação.
+
+Apesar de importantes, os relatórios de monitoramento do INEP consolidam os resultados dos estados, por região e, em nível nacional, não estando disponíveis dados e análises em nível municipal. Diante disso, este trabalho propõe uma metodologia que permita gerar dados para serem utilizados no monitoramento das metas do PNE em nível municipal. 
+
+Este artigo apresenta os resultados parciais da metodologia proposta para a metas 1, 2 e 3 do Plano Nacional de Educação e apresenta sua aplicação em municípios da Região Norte do Brasil.
+
+## Os desafios do monitoramento de políticas públicas e a geração de dados abertos
+
+O mundo vive um momento sem precedentes na geração de dados. Se por um lado isso é verdade, é importante que seja salientado em que contexto isso acontece. A cada acesso à rede mundial de computadores, milhares de informação são geradas. As questões postas são: quem tem acesso a esses dados? quem domina as tecnologias necessárias para "raspagem" dos dados disponíveis na internet? Já no contexto dos dados governamentais e da política dos dados abertos, há questões semelhantes, mas os desafios são outros. Se a geração, coleta e análise de dados por empresas privadas tem como o objetivos o crescimentos de seus negócios e, portanto, o acesso a esses dados é estratégico para seu o aumento em seu faturamento, o que justifica o investimento em tecnologias e pessoas qualificadas, no setor público, o tardio processo de informatização e, a mais atrasada disponibilização de dados na internet, coloca em cheque as tentativas de estudo, monitoramento e fiscalização de políticas públicas.
+
+Há poucas exceções a essa regra. O Instituto Brasileiro de Geografia e Estatística (IBGE) é, por vovação, pioneiro na disponibilização de dados. Destaca-se, também, o Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP). Estes dois órgãos geram grandes volumes de dados e produzem vários estudos disponibilizados em seus sítios na internet. No caso específico do Plano Nacional de Educação, o INEP disponibiliza os seguintes estudos:
+
+* Linha de Base | Plano Nacional de Educação: 2014 – 2024
+* Relatório do 1º Ciclo de Monitoramento de Metas do PNE: Biênio 2014 – 2016
+* Relatório do 2º Ciclo de Monitoramento de Metas do PNE: 2018
+* Relatório do 3º Ciclo de Monitoramento de Metas do PNE: 2020 
+* Relatório do 4º Ciclo de Monitoramento de Metas do PNE: 2022
+
+Estes relatórios estão disponíveis em <https://www.gov.br/inep/pt-br/areas-de-atuacao/gestao-do-conhecimento-e-estudos-educacionais/estudos-educacionais/relatorios-de-monitoramento-do-pne>
+
+Além desses relatórios, há disponíveis os seguintes painéis de monitoramento:
+
+* Painel de Monitoramento do PNE disponível, disponível em <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/inep-data/painel-de-monitoramento-do-pne>
+
+* PNE em Movimento, disponível em <http://simec.mec.gov.br/pde/grafico_pne.php>
+
+Segundo informações disponível no site, o *Painel de Monitoramento do Plano Nacional de Educação (PNE)* reúne gráficos e tabelas, com desagregações por regiões, unidades da Federação e perfis socioeconômicos das 20 metas do PNE em uma interface amigável para o usuário. Os dados são atualizados a cada dois anos, de acordo com a conclusão dos relatórios dos ciclos de monitoramento das metas, atribuição do INEP, conforme a Lei do PNE. Já o *PNE em Movimento* tenta avançar no mesmo escopo desse trabalho e apresenta resultados desagregados até o nível municipal para as 20 metas do PNE para o ano de 2014.
+
+Apesar de importantes, tanto os relatórios, quanto os painéis disponíveis assumem um papel fundamental, principalmente aos formuladores de políticas púbicas e aos gestores em geral, mas de forma alguma esgotam o potencial de análise. Há uma infinidade de possibilidades de conhecimento a serem gerados, desde que estes dados estejam disponíveis. A ferramenta que mais se aproxima em direção à geração de conhecimento, a partir de uma base de dados estruturados, é o *PNE em Movimento*. Entretanto, os dados utilizados no painel nem estão disponível, nem a metodologia utilizada. A metodologia utilizada diz respeito tecnicas utilizadas na geração de dados agregados em nível de estado e região, visto que mencionam a PNAD, o que não permite análise de dados desagregados em nível municipal.
+
+Este trabalho pretende suprir esta lacuna ao propor uma metodologia que permita, mesma com todas as limitações dos dados abertos, estimar os dados em nível municipal e, a partir deles, permitir que seja feita o monitoramento dos indicaadores do PNE numa perspectiva espaço-tempora.
+
+
+## 3) Recomendações: diretrizes práticas para casos semelhantes, ajustes necessários na legislação, políticas e arranjos, diretrizes para inovação, etc; 
+
+Estimar indicadores desagregados tem seus desafios. No caso específicos dos indicadores associados ao Plano Nacional de Educação, eles ocorrem em várias dimensões, seja no tempo ou no espaço. Os dados censitários, sejam eles educativos, mas, principalemente populacionais, requerem um tratamento que possibile interpolar os dados anuais não coletados. Como os dados do Censo Escolar são coletados regularmente e mantém uma certa estabilidade metodológca, nos deteremos, neste primeiro momento, em detalhar a metodologia utilizadas para etimar os dados populacionais necesáriaos a esse pesquisa.
+
+Para atender ao objetivos deste projeto, são neessários os dados desagregados por *município* e, pelo que o IBGE chama de *idade simples*, conceito que será detalhado oportunamente. Em termos da popução dos municípios ao longo do anos, o IBGE divulga, regularmente as estimativas populacionas dos municípios brasileiros. Apesar de fundamental, estas estimativas não são suficientes. O Plano Nacional de Educação estabele metas por faixa etária, ou seja, mais do que saber a populacão de um determinado município, é condição necessária, saber a total de uma popuação de um determinado município *m*, em ano ano *t*, desagregado por idades *i*. Entretanto, só há esta distribuição para no ano de 2010, data do último censo.
+
+Portanto, para estimar a população dos municípios brasileiros desagregados por idade, utilizou os dados do Censo Populacional de 2010, a partir do qual calculou-se as taxas utilizadas para estimar as *idades simples* para todos os municípios brasileiros, nos anos de interesse.
+
+
+$$p_{i}=\frac{t_{i}}{p_{a}}, i = 0,...,100, a=1,...5.568$$
+onde $t_{i}$ é o total de pessoas com a idade *i*, de 0 a 100 anos e, $p_{a}$, é a população dos 5.568 municípios brasileiros e o Distrito Federal, no ano de 2010. A partir do indicador $p_{i}$, foram estimadas as *idade simples* para os anos intercensitários. 
+
+$i$
+
+
+
+
+## 4) referências: lista de documentos, relatórios, regulamentos, bibliografia e demais referências citadas.
+
+
+Referências:
+
+<https://www.gov.br/inep/pt-br/areas-de-atuacao/gestao-do-conhecimento-e-estudos-educacionais/estudos-educacionais/relatorios-de-monitoramento-do-pne>
