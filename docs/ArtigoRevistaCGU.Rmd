@@ -8,21 +8,33 @@ date: '2022-05-04'
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Hidelbrando Ferreira Rodrigues, Augusto Sousa da Silva Filho, Marco André Santos Machado, Júlio
+Hidelbrando Ferreira Rodrigues, Augusto Sousa da Silva Filho, Marco André Santos Machado, Júlio César Loureiro Dilahar
 
 ## Resumo
 
+<<<<<<< HEAD
 
+=======
+`# r lorem::ipsum()`
+>>>>>>> 6825a94811f2e3ef2827e8ebbbd1ed9374a77184
 
 **Palavras-chave:** Palavra 1; Palavra 2; Palavra 3
 
 ## Abstract
+<<<<<<< HEAD
 
+=======
+`# r lorem::ipsum()`
+>>>>>>> 6825a94811f2e3ef2827e8ebbbd1ed9374a77184
 
 **Keywords:** Word 1; Word 2; Word 3
 
 ## Resumén
+<<<<<<< HEAD
 
+=======
+`# r lorem::ipsum()`
+>>>>>>> 6825a94811f2e3ef2827e8ebbbd1ed9374a77184
 
 **Palabras llave:** Palabra 1; Palabra 2; Palabra 3
 
@@ -35,6 +47,7 @@ O PNE possui metas estruturantes, que visam a garantia do direito à educação 
 
 O Ministério da Educação publicou o 1º, 2º, 3º e 4º Relatórios referentes aos ciclos de monitoramento das metas do PNE: biênio 2014-2016, 2016-2018 e 2008-2020, exercendo, assim, sua atribuição de publicar, a cada dois anos, estudos para aferir o cumprimento das metas estabelecidas no PNE, conforme determina a Lei nº 13.005/2014. Estas publicações fazem parte de um conjunto de ações realizadas pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), voltadas à produção e disseminação de informações e a estudos direcionados a subsidiar o monitoramento do PNE, bem como à formulação, implementação e avaliação de políticas públicas na área da educação.
 
+<<<<<<< HEAD
 Apesar de importantes, os relatórios de monitoramento do INEP consolidam os resultados dos estados, por região e, em nível nacional, não estando disponíveis dados e análises em nível municipal. Diante disso, este trabalho propõe uma metodologia que permita gerar dados para serem utilizados no monitoramento das metas do PNE em nível municipal. 
 
 Este artigo apresenta os resultados parciais da metodologia proposta para a metas 1, 2 e 3 do Plano Nacional de Educação e apresenta sua aplicação em municípios da Região Norte do Brasil.
@@ -64,12 +77,120 @@ Segundo informações disponível no site, o *Painel de Monitoramento do Plano N
 Apesar de importantes, tanto os relatórios, quanto os painéis disponíveis assumem um papel fundamental, principalmente aos formuladores de políticas púbicas e aos gestores em geral, mas de forma alguma esgotam o potencial de análise. Há uma infinidade de possibilidades de conhecimento a serem gerados, desde que estes dados estejam disponíveis. A ferramenta que mais se aproxima em direção ao geração de conhecimento, a partir de uma base de dados estruturados, é o *PNE em Movimento*. Entretanto, os dados utilizados na geração do painel nem estão disponível, nem a metodologia utilizada. A metodologia utilizada diz respeito tecnicas utilizadas na geração de dados agregados em nível de estado e região, visto que mencionam a PNAD, o que não permite análise de dados desagregados em nível municipal.
 
 Este trabalho pretende suprir esta lacuna ao propor uma metodologia que permita, mesma com todas as limitações dos dados abertos, estimar os dados em nível municipal e, a partir deles, permitir que seja feita o monitoramento dos indicaadores do PNE numa perspectiva espaço-tempora.
+=======
+  Apesar de importantes, os relatórios de monitoramento do INEP consolidam os resultados dos estados, por região e nacional, não estando disponívies análise em nível municipal. Diante disso, este trabalho pretende seguir a mesma metodologia utilizado pelo INEP e propor uma metodologia que permita a análise dos indicadores do PNE em nível municipal.
 
+  Como estudo de caso, pretende-se calcular os indicadores do PNE para a Microrregião de Itacoatiara, composta pelos municípios de Itacoatiara, Itapiranga, Nova Olinda do Norte, Silves e Urucurituba, que fazem parte da Mesorregião denominada de Centro Amazonense, correspondendo a uma população de 177.387 habitante (IBGE, 2018), baseando-se  nisto o objetivo geral deste trabalho é Realizar o monitoramento das metas estabelecidas nos Planos Municipais de Educação nos municípios de Itacoatiara, Itapiranga, Nova Olinda do Norte, Silves e Urucurituba, que formam a microrregião de Itacoatiara, levando em consideração a importância de conhecer a realidade educacional desta microrregião e apresenta-la para a sociedade.
+>>>>>>> 6825a94811f2e3ef2827e8ebbbd1ed9374a77184
 
+### 1.1) Metas do Plano Nacional de Educação
+
+De modo geral, o PNE foi desenvolvido com base em diretrizes e estratégias específicas listadas no anexo da Lei nº 13.005/2014 [^1]. Visando descrever e explicar melhor cada meta do Plano e compreender a importância de suas aplicações no país, foi elaborado o documento "Conhecendo as 20 metas do Plano Nacional de Educação" [^2], nele estão todas as informações necessárias para o conhecimento teórico de cada um dos indicadores em questão neste estudo e aplicação de políticas necessárias para a conclusão de cada meta em questão.    
+Todavia, o enfoque principal deste trabalho é o estudo e acompanhamento das metas 1, 2 e 3 do referido plano acima e seus respectivos indicadores, para os municípios de Itacoatiara, Itapiranga, Nova Olinda do Norte, Silves e Urucurituba entre os anos de 2014 e 2020. Fundamentado nesta sistemática, serão inspecionadas em outro momento as demais metas não detalhadas neste artigo.    
+Utiliza-se como fonte para este cálculo, a estimativa da população junto ao censo demográfico[^3] da população desgregada por idade e municipio feita pelo IBGE e o Censo Escolar[^4] disponibilizado pelo INEP.    
+Parte do desafio das 3 primeiras metas é voltar a atenção para a educação infantil, no que diz respeito à centralização das forças motrizes para o apoio às matriculas de crianças de 0 a 5 anos na creche e pré-escola. Dado este fato, busca-se o melhor planejamento para o aumento do número de crianças vinculadas às instituções de ensino primário, contando com apoio em âmbito municipal e estadual. Outro desafio nacional é assegurar acesso pleno de crianças e jovens de 6 a 17 anos aos ensinos fundamental e médio, inclusive com ampliação da oferta de educação profissional. Esse trabalho exige colaboração entre redes estaduais e municipais e acompanhamento da trajetória educacional de cada estudante. O estado precisa fortalecer seu papel de coordenação no território, fazendo busca ativa e viabilizando o planejamento de matrículas de forma integrada aos municípios, bem como incorporando instrumentos de monitoramento e avaliação contínua em colaboração com os municípios e com a União. Há ainda a necessidade de que os estados e municípios projetem a ampliação e a reestruturação de suas escolas na perspectiva da educação integral, e, nesse contexto, é estratégico considerar a articulação da escola com os diferentes equipamentos públicos, espaços educativos, culturais e esportivos, revitalizando os projetos pedagógicos das escolas nessa direção[^5].     
+
+#### 1.1.1) Meta 1 - Educação Infantil
+Universalizar, até 2016, a educação infantil na pré-escola para as crianças de 4 (quatro) a 5 (cinco) anos de idade e ampliar a oferta de educação infantil em creches de forma a atender, no mínimo, 50% (cinquenta por cento) das crianças de até 3 (três) anos até o final da vigência deste PNE.  
+
+Indicador 1A: Percentual da população de 4 a 5 anos que frequenta a escola/creche.    
+
+Fórmula de cálculo:
+
+$$\frac{População~de~4~a~5~anos~que~frequenta~creche/escola}{Populaçao~de~4~a~5~anos}$$
+Descrição:    
+
+Com abrangência municipal, o objetivo deste indicador é exibir o percentual de crianças de 4 a 5 anos de idade que frequentam a escola/creche em relação à população total dessa faixa etária.    
+
+Indicador 1B: Percentual da população de 0 a 3 anos que frequenta a escola/creche.    
+
+Fórmula de cálculo:
+
+$$\frac{População~de~0~a~3~anos~que~frequenta~creche/escola}{Populaçao~de~0~a~3~anos}$$    
+Com abrangência municipal, o objetivo deste indicador é exibir o percentual de crianças de 0 a 3 anos de idade que frequentam a escola/creche em relação à população total dessa faixa etária.    
+
+#### 1.1.2) Meta 2 - Ensino Fundamental    
+
+Universalizar o ensino fundamental de 9 (nove) anos para toda a população de 6 (seis) a 14 (quatorze) anos e garantir que pelo menos 95% (noventa e cinco por cento) dos alunos concluam essa etapa na idade recomendada, até o último ano de vigência deste PNE.
+
+Indicador 2A: Percentual de pessoas de 6 a 14 anos que frequentam ou que já concluíram o ensino fundamental (taxa de escolarização líquida ajustada).
+
+Fórmula de cálculo:
+
+$$\frac{População~de~6~a~14~anos~que~frequenta~a~escola~ou~que~já~concluiu~o~ensino~fundamental}{Populaçao~de~6~a~14~anos}$$  
+Descrição:    
+
+O intuito deste indicador é mostrar o percentual de pessoas de 6 a 14 anos de idade que frequentam a escola ou que já concluíram o ensino fundamental, em relação à população total dessa faixa etária. Em relação ao numerador, estão sendo selecionadas e somadas as pessoas de 6 a 14 anos que estão matriculadas no fundamental ou que concluíram essa etapa e estão no ensino médio. Não estão sendo somadas as pessoas de 6 a 14 anos que concluíram o ensino fundamental e estão no ensino superior e as pessoas que concluíram o ensino fundamental e estão fora do sistema escolar. Também não estão sendo incluidos os alunos em etapas do EJA.   
+
+Indicador 2B: Percentual de pessoas de 16 anos com pelo menos o ensino fundamental concluído.
+
+Fórmula de cálculo:
+
+$$\frac{População~de~16~anos~com~o~ensino~fundamental~concluído}{Populaçao~de~16~anos}$$  
+Descrição:    
+
+Aqui está sendo selecionado apenas o total de pessoas com 16 anos de idade que já concluíram o ensino fundamental, em relação à população total dessa faixa etária. Quanto ao numerador, estão sendo somadas as pessoas na faixa etária de 16 anos que concluíram essa etapa e estão no ensino médio. Não estão sendo somadas as pessoas de 16 anos que concluíram o ensino fundamental e estão no ensino superior e as pessoas que estão fora do sistema escolar. Também não estão sendo incluidos os alunos em etapas do EJA.    
+
+#### 1.1.3) Meta 3 - Ensino Médio    
+
+Universalizar, até 2016, o atendimento escolar para toda a população de 15 (quinze) a 17 (dezessete) anos e elevar, até o final do período de vigência deste PNE, a taxa líquida de matrículas no ensino médio para 85% (oitenta e cinco por cento).
+
+Indicador 3A: Percentual da população de 15 a 17 anos que frequenta a escola ou já concluiu a educação básica.
+
+Fórmula de cálculo:
+
+$$\frac{População~de~15~a~17~anos~que~frequenta~a~escola~ou~que~já~concluiu~a~educação~básica}{Populaçao~de~15~a~17~anos}$$    
+
+Descrição:    
+
+O objetivo deste indicador é exibir o percentual de pessoas de 15 a 17 anos de idade que frequentam a escola ou que já concluíram a educação básica, em relação à população total dessa faixa etária. Em relação ao numerador, estão sendo selecionadas e somadas as pessoas de 15 a 17 anos que estão matriculadas no ensino fundamental, médio, EJA e cursos técnicos. Não estão sendo somadas as pessoas de 15 a 17 anos que concluíram o ensino básico e estão no ensino superior e as pessoas que concluíram essa etapa e estão fora do sistema escolar.    
+
+Indicador 3B: Percentual da população de 15 a 17 anos que frequenta o ensino médio ou possui educação básica completa.
+
+Fórmula de cálculo:
+
+$$\frac{População~de~15~a~17~anos~que~frequenta~o~ensino~médio~ou~que~já~concluiu~a~educação~básica}{Populaçao~de~15~a~17~anos}$$    
+
+Descrição:    
+
+O objetivo deste indicador é exibir o percentual de pessoas de 15 a 17 anos de idade que frequentam o ensino médio ou que já concluíram a educação básica, em relação à população total dessa faixa etária. Quanto ao filtro utilizado no numerador, estão sendo selecionadas e somadas as pessoas de 15 a 17 anos que estão matriculadas no ensino médio comum, profissionalizante, cursos técnicos e etapas do EJA. Não estão sendo somadas as pessoas de 15 a 17 anos que concluíram o ensino básico e estão no ensino superior e as pessoas que concluíram essa etapa e estão fora do sistema escolar.    
+
+<<<<<<< HEAD
 ## 3) Recomendações: diretrizes práticas para casos semelhantes, ajustes necessários na legislação, políticas e arranjos, diretrizes para inovação, etc; 
+=======
+## 2) corpo de trabalho: discussões práticas sobre experiências relacionadas a mecanismos de acesso à informação e recomendações para melhor desenho, implementação e avaliação de políticas; 
+
+<<<<<<< HEAD
+### 2.1) Metodologia
+
+Estimar indicadores desagregados tem seus desafios. No caso específicos dos indicadores associados ao Plano Nacional de Educação, eles ocorrem em várias dimensões, seja no tempo ou no espaço. Os dados censitários, sejam eles educativos, mas, principalemente populacionais, requerem um tratamento que possibile interpolar os dados anuais não coletados. Como os dados do Censo Escolar são coletados regularmente e mantém uma certa estabilidade metodológca, nos deteremos, neste primeiro momento, em detalhar a metodologia utilizadas para etimar os dados populacionais necesáriaos a esse pesquisa.
+
+Para atender ao objetivos deste projeto, são neessários os dados desagregados por *município* e, pelo que o IBGE chama de *idade simples*, conceito que será detalhado oportunamente. Em termos da popução dos municípios ao longo do anos, o IBGE divulga, regularmente as estimativas populacionas dos municípios brasileiros. Apesar de fundamental, estas estimativas não são suficientes. O Plano Nacional de Educação estabele metas por faixa etária, ou seja, mais do que saber a populacão de um determinado município, é condição necessária, saber a total de uma popuação de um determinado município *m*, em ano ano *t*, desagregado por idades *i*. Entretanto, só há esta distribuição para no ano de 2010, data do último censo.
+
+Portanto, para estimar a população dos municípios brasileiros desagregados por idade, utilizou os dados do Censo Populacional de 2010, a partir do qual calculou-se as taxas utilizadas para estimar as *idades simples* para todos os municípios brasileiros, nos anos de interesse.
 
 
-## 4) referências: lista de documentos, relatórios, regulamentos, bibliografia e demais referências citadas.
+$$p_{i}=\frac{t_{i}}{p_{a}}, i = 0,...,100, a=1,...5.568$$
+onde $t_{i}$ é o total de pessoas com a idade *i*, de 0 a 100 anos e, $p_{a}$, é a população dos 5.568 municípios brasileiros e o Distrito Federal, no ano de 2010. A partir do indicador $p_{i}$, foram estimadas as *idade simples* para os anos intercensitários. 
+=======
+`r lorem::ipsum(4, avg_words_per_sentence = 20)`
+>>>>>>> parent of e433038 (Atualização 12/07)
+ 
+## 3) Resultados e discussões: Comparação entre o resultado obtido e o esperado.
+ 
+## 4) Recomendações: diretrizes práticas para casos semelhantes, ajustes necessários na legislação, políticas e arranjos, diretrizes para inovação, etc;    
+>>>>>>> 6825a94811f2e3ef2827e8ebbbd1ed9374a77184
+
+
+## 5) referências: lista de documentos, relatórios, regulamentos, bibliografia e demais referências citadas.    
+
+[^1]: **PRESIDÊNCIA DA REPÚBLICA**, Art. 214 da Constituição Federal, Lei nº 13.005/2014. Disponível em: <http://www.planalto.gov.br/ccivil_03/_Ato2011-2014/2014/Lei/L13005.htm>. Acesso em: 13 de jul. de 2022.
+[^2]:  **MEC/SASE**, Brasil, 2014. Disponível em: <http://pne.mec.gov.br/images/pdf/pne_conhecendo_20_metas.pdf>. Acesso em: 13 de jul. de 2022.
+[^3]: **SIDRA/IBGE**,  Tabela 1552 - População residente, por situação do domicílio e sexo, segundo a forma de declaração da idade e a idade. Disponível em: <https://sidra.ibge.gov.br/tabela/1552?fbclid=IwAR3PonnEhgVF1jdvbkyUnGCFvg2dnogSyRLtnGqY6M65jJo7T0eou3DVsQ0#/n1/all/n3/all/n6/all/v/allxp/p/all/c1/0/c2/0/c286/0/c287/all/l/v,p+c1+c2,t+c286+c287/resultado>. Acesso em: 13 de jul. de 2022.
+[^4]: **INEP**, Censo Escolar, 2014-2020. Disponível em: <https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar>. Acesso em: 13 de jul. de 2022.
+[^5]: **MEC/SASE**, Cap. II. O ESPÍRITO DESTE PNE: UMA POLÍTICA DE ESTADO DE EDUCAÇÃO PARA A PRÓXIMA DÉCADA. Disponível em: <http://pne.mec.gov.br/images/pdf/pne_conhecendo_20_metas.pdf>. Acesso em: 13 de jul. de 2022.
+
+
 
 
 Referências:
