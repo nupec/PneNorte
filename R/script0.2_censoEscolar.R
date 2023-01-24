@@ -13,8 +13,8 @@ variaveis_selecionadas_1314 <- c("ANO_CENSO",
                                  "FK_COD_ETAPA_ENSINO",
                                  "FK_COD_ESTADO_ESCOLA",
                                  "COD_MUNICIPIO_ESCOLA",
-                                 )
-
+                                 "FK_COD_MOD_ENSINO",
+                                 "ID_POSSUI_NEC_ESPECIAL")
 
 variaveis_selecionadas_1520 <- c("NU_ANO_CENSO",
                                  "NU_IDADE_REFERENCIA",
@@ -23,8 +23,7 @@ variaveis_selecionadas_1520 <- c("NU_ANO_CENSO",
                                  "CO_UF",
                                  "CO_MUNICIPIO",
                                  "IN_ESPECIAL_EXCLUSIVA",
-                                 "IN_NECESSIDADE_ESPECIAL",
-                                 "IN_ESPECIAL_EXCLUSIVA")
+                                 "IN_NECESSIDADE_ESPECIAL")
 
 ## Nesta etapa, eu aponto os caminhos das bases de dados
 arq_matriculas_no_1314 <-list.files("data-raw/2013_2014/",
@@ -32,6 +31,7 @@ arq_matriculas_no_1314 <-list.files("data-raw/2013_2014/",
 
 arq_matriculas_no_1520 <-list.files("data-raw/2015_2020/",
                                     full.names = T)
+
 ## Aqui, eu importo as Matrículas dos alunos do Norte do Brasil
 ## Eu opto pelo pacote função "fread" do pacote data.table, pela possibilidade
 ## de importar apenas as variáveis de interesse.
@@ -47,6 +47,7 @@ matriculas_no_1520 <- purrr::map_dfr(arq_matriculas_no_1520,
 
 ## Como as bases tem nomes diferentes nas tabelas, eu preferi usar a função colnames
 ## ao invés do mutate (que ainda não tenho muita experiência)
+
 colnames(matriculas_no_1314) <- names(matriculas_no_1520)
 
 matriculas_no_1320 <- dplyr::bind_rows(matriculas_no_1314,

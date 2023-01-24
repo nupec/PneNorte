@@ -4,7 +4,7 @@
 
 # 1) Importação dos índices da população brasileira por idade-------------------
 ## Base: Censo 2010
-indices_tidy <- readr::read_rds("data/indicesCidades.rds")
+indices_tidy <- readr::read_rds("data/indicesIdadesMunicipios.rds")
 
 # 2) Importando a estimativa da população das cidades brasileiras --------
 ## 2.1) Importando as estimativas da população (2001 a 2020)
@@ -16,7 +16,7 @@ populacao_municipios <- readRDS("data/popMunBr1991a2021.rds") |>
     codigo_municipio = as.numeric(codigo_municipio)
   )
 
-## 2.4) EStimando a população desagregadas por idade
+## 2.1) EStimando a população desagregadas por idade
 pop_est_idade <- dplyr::left_join(populacao_municipios,
                                   indices_tidy,
                                   by="codigo_municipio")|>

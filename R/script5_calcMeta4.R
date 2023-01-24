@@ -5,6 +5,8 @@
 # com a garantia de sistema educacional inclusivo, de salas de recursos multifuncionais, classes,
 # escolas ou serviços especializados, públicos ou conveniados.
 
+# Carregando a base de dados populacionais.
+
 # Indicador 4A: Percentual da população de 4 a 17 anos de idade com deficiência que
 # frenquenta a escola.
 

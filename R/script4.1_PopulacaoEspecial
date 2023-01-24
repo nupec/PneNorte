@@ -18,34 +18,3 @@ indicesIdadesMunicipios <- readxl::read_excel("data-raw/tabela1552_tidy.xlsx", s
   tidyr::fill(c("codigo_municipio", "nome_municipio", "nome_uf"))
 
 readr::write_rds(indicesIdadesMunicipios, "data/indicesIdadesMunicipios.rds")
-
-# 2) População dos municípios brasileiros entre 1991 e 2021
-
-basedosdados::set_billing_id("indicadores-educacionais-ods4")
-
-# Para carregar o dado direto no R
-query <- basedosdados::bdplyr("br_ibge_populacao.municipio")
-popMunicipiosBr <-basedosdados::bd_collect(query)
-
-readr::write_rds(popMunicipiosBr, "data/popMunBr1991a2021.rds")
-
-# # 3) Base de mapas -----------------------------------------------------------
-#
-# ##  Delimitação do Brasil
-# brasil <- geobr::read_country(year = 2020)
-# readr::write_rds(brasil, "data-raw/Brasil_shp.rds")
-#
-# ##  Delimitação do Estado
-# estados <- geobr::read_state(year = 2020)
-# readr::write_rds(estados, "data-raw/Estados_shp.rds")
-#
-# ##  Delimitação do Municipios
-# municipios <- geobr::read_municipality(year = 2020)
-# readr::write_rds(municipios, "data-raw/Municipios_shp.rds")
-#
-
-# Atualizações:
-# 01/08/2021
-# 24/08/2021
-# 31/08/2021
-# 28/04/2021
