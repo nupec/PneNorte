@@ -106,7 +106,7 @@ O estado do `r estado_analisado` possui `r meta1$nome_municipio |> unique() |> l
 meta1 |> 
   dplyr::group_by(ano) |> 
   dplyr::summarise(
-    media1b = round(mean(indice1b), 2)
+    media1b = round(mean(indicador1b), 2)
   ) |> 
   ggplot(aes(x=ano, y=media1b)) +
   geom_line() + 
@@ -128,7 +128,7 @@ meta1 |>
 
 
 ```{r include=FALSE}
-tabela <- fdth::fdt(meta1$indice1b,
+tabela <- fdth::fdt(meta1$indicador1b,
           start = 0, 
           end = 0.5, 
           h = 0.05)
@@ -142,7 +142,7 @@ tabela |> kable()
 ```{r include=FALSE}
 
 a <- meta1 |> 
-  dplyr::select(indice1b, indice1a, meta1)
+  dplyr::select(indicador1b, indicador1a, meta1)
 ```
 
 

@@ -9,9 +9,10 @@
 ## A seguir, importa-se a tabela 1552 e corrige-se o tipo de variável
 ## "codigo_municipio" para o formato numérico.
 
-# 1) Coeficientes populacionais das idade simples por município brasileiro, ano de referência: 2010
 
-indicesIdadesMunicipios <- readxl::read_excel("data-raw/tabela1552_tidy.xlsx", sheet = 2) |>
+getwd()
+# 1) Coeficientes populacionais das idade simples por município brasileiro, ano de referência: 2010
+indicesIdadesMunicipios <- readxl::read_excel("../data-raw/tabela1552_tidy.csv", sheet = 2) |>
   dplyr::mutate(
     codigo_municipio = as.numeric(codigo_municipio)
   ) |>
@@ -28,6 +29,9 @@ query <- basedosdados::bdplyr("br_ibge_populacao.municipio")
 popMunicipiosBr <-basedosdados::bd_collect(query)
 
 readr::write_rds(popMunicipiosBr, "data/popMunBr1991a2021.rds")
+
+#
+
 
 # # 3) Base de mapas -----------------------------------------------------------
 #
