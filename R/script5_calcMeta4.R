@@ -5,8 +5,6 @@
 # com a garantia de sistema educacional inclusivo, de salas de recursos multifuncionais, classes,
 # escolas ou serviços especializados, públicos ou conveniados.
 
-# Carregando a base de dados populacionais.
-
 # Indicador 4A: Percentual da população de 4 a 17 anos de idade com deficiência que
 # frenquenta a escola.
 
@@ -16,13 +14,6 @@
 # Indicador 4C: Percentual de matrículas na Educação Básica de alunos de 4 a 17 anos de idade com
 # deficiência, transtornos globais do desenvolvimento (TGD), altas habilidades ou superdotação que
 # recebem Atendimento Educacional Especializado.
-
-# Carregando a base de dados ----------------------------------------------
-matriculaNorte <- readr::read_rds("data-raw/matricula1320.rds")
-populacaoEst   <- readr::read_rds("data/populacaoEstimadaPorIdade.rds")
-codMunicipios  <- readxl::read_excel("data-raw/CODIGO_MUNICIPIO.xls")
-
-# Tratamento da base dados ------------------------------------------------
 
 # Dicionário das bases
 
@@ -34,25 +25,26 @@ codMunicipios  <- readxl::read_excel("data-raw/CODIGO_MUNICIPIO.xls")
 
 ## cod_Municipios: contém todos os códigos das divisões territoriais brasileira,
 
+# Carregando a base de dados populacionais ---------------------------------
+populacaoComDeficiencia <- readRDS("~/GitHub/PneNorte/data/populacaoComDeficiencia.rds")
+
 # Agrupando as matriculas --------------------------------------------------
 
 ## Indicador 4A
+
+# Filtrando o numerador
 
 
 
 ## Indicador 4B
 
+# Filtrando o numerador
+
 
 
 ## Indicador 4C
 
-
-
-# Agrupando as populações --------------------------------------------------
-
-## Agrupando a população de 4 a 17 anos
-
-
+# Filtrando o numerador
 
 # Agrupando as bases de matrículas e da população e calculando os indicadores
 

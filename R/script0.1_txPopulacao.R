@@ -9,8 +9,6 @@
 ## A seguir, importa-se a tabela 1552 e corrige-se o tipo de variável
 ## "codigo_municipio" para o formato numérico.
 
-
-getwd()
 # 1) Coeficientes populacionais das idade simples por município brasileiro, ano de referência: 2010
 indicesIdadesMunicipios <- readxl::read_excel("../data-raw/tabela1552_tidy.csv", sheet = 2) |>
   dplyr::mutate(
