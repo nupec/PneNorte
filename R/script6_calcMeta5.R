@@ -136,7 +136,7 @@ readr::write_rds(meta5, "data/Meta5.rds")
 
 # Precisa-se de uma solução para este problema!!!!!
 
-# Ideia para junção dos nomes dos municípios juntamente aos seus códigos -------
+# Ideia para junção dos nomes dos municípios juntamente aos seus códigos ------
 
 # Tratando os nomes das variáveis da base: Código dos Municípios
 # codMunicipios <- codMunicipios |> dplyr::filter(Nome_Regiao %in% "Norte") |>

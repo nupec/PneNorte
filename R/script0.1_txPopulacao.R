@@ -28,9 +28,6 @@ popMunicipiosBr <-basedosdados::bd_collect(query)
 
 readr::write_rds(popMunicipiosBr, "data/popMunBr1991a2021.rds")
 
-#
-
-
 # # 3) Base de mapas -----------------------------------------------------------
 #
 # ##  Delimitação do Brasil

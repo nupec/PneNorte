@@ -13,8 +13,7 @@ populacao_municipios <- readRDS("data/popMunBr1991a2021.rds") |>
     codigo_municipio = id_municipio
   ) |>
   dplyr::mutate(
-    codigo_municipio = as.numeric(codigo_municipio)
-  )
+    codigo_municipio = as.numeric(codigo_municipio))
 
 ## 2.1) EStimando a população desagregadas por idade
 pop_est_idade <- dplyr::left_join(populacao_municipios,

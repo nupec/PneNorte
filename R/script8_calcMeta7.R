@@ -11,7 +11,7 @@
 # EDUCAÇÃO BÁSICA QUE POSSUEM, PELO MENOS, 25% DOS ALUNOS
 # DO PÚBLICO-ALVO DA ETI EM JORNADA DE TEMPO INTEGRAL.
 
-## Empilhando as bases do Censo Escolar -----------------------------------------------------
+## Empilhando as bases do Censo Escolar ----------------------------------------------------
 
 ## Neste scrip, importa-se as bases do Censo Escolar que serão úteis nas
 ## pesquisas futuras

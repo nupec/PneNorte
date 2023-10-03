@@ -39,8 +39,7 @@ codMunicipios <- codMunicipios |> janitor::clean_names() |>
                 codigo_municipio = codigo_municipio_completo) |>
   dplyr::select(-municipio) |>
   dplyr::mutate(
-    codigo_municipio = as.numeric(codigo_municipio)
-  )
+    codigo_municipio = as.numeric(codigo_municipio))
 # Agrupando as matriculas --------------------------------------------------
 
 ## Indicador 2A
@@ -55,8 +54,7 @@ EF_6a14 <- matriculaNorte |>
   dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
   dplyr::count(codigo_municipio) |>
   dplyr::mutate(
-    joinTab = stringr::str_c(ano, codigo_municipio,
-                             sep = "_")
+    joinTab = stringr::str_c(ano, codigo_municipio,sep = "_")
   ) |> dplyr::rename(qtdeMat_6a14 = n)
 
 ### OBS 1: Aqui está sendo somado as pessoas de 6 a 14 anos que estão matriculadas no
@@ -76,9 +74,8 @@ EF_conc_16 <- matriculaNorte |>
   dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
   dplyr::count(codigo_municipio) |>
   dplyr::mutate(
-    joinTab = stringr::str_c(ano, codigo_municipio,
-                             sep = "_")
-  ) |> dplyr::rename(qtdeMat_16 = n)
+    joinTab = stringr::str_c(ano, codigo_municipio,sep = "_")) |>
+  dplyr::rename(qtdeMat_16 = n)
 
 ### OBS 1: Verificar no censo escolar do ensino superior todos os alunos
 ### com 16 anos.
@@ -95,8 +92,7 @@ popEnsFund6a14 <- populacaoEst |>
   dplyr::filter(idade %in% c(6:14)) |>
   dplyr::group_by(ano, codigo_municipio, nome_municipio) |>
   dplyr::summarise(
-    popFaixa6a14 = sum(populacao_estimada)
-  ) |>
+    popFaixa6a14 = sum(populacao_estimada)) |>
   dplyr::group_by(codigo_municipio) |>
   dplyr::mutate(
     joinTab = stringr::str_c(ano, codigo_municipio,
@@ -120,8 +116,7 @@ popEnsFund16 <- populacaoEst |>
 
 ## Indicador 2A
 
-baseindicador2A <- dplyr::left_join(EF_6a14,
-                                    popEnsFund6a14,
+baseindicador2A <- dplyr::left_join(EF_6a14,popEnsFund6a14,
                               by = "joinTab") |>
   dplyr::select(ano.x, codigo_municipio.x, nome_municipio,
                 qtdeMat_6a14, popFaixa6a14) |>

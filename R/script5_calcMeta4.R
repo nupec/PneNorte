@@ -185,7 +185,7 @@ baseMeta4[is.na(baseMeta4)] <- 0
 # Salvando
 readr::write_rds(baseMeta4, "data/Meta4_Indicador4B_4C.rds")
 
-### OBSERVAÇÃO!!! ---------------------------------------------------
+### OBSERVAÇÃO!!! --------------------------------------------------
 # Para o cálculo desta meta só foi possível utilizar o filtro na variável
 # "ano" para os anos de 2015 a 2020, pois não constam matrículas em classes
 # comuns ou especiais nos numeradores dos indicadores 4B e 4C para os anos

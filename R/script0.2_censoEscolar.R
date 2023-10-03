@@ -37,7 +37,6 @@ variaveis_selecionadas_1920 <- c("NU_ANO_CENSO",
                                  "TP_TIPO_ATENDIMENTO_TURMA",
                                  "IN_NECESSIDADE_ESPECIAL")
 
-
 ## Nesta etapa, eu aponto os caminhos das bases de dados
 arq_matriculas_no_1314 <-list.files("data-raw/2013_2014/",full.names = T)
 

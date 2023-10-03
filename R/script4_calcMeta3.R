@@ -40,8 +40,7 @@ EF_EM_EJA_EP_15a17 <- matriculaNorte |>
   dplyr::group_by(ano, codigo_municipio, tp_etapa_ensino) |>
   dplyr::count(codigo_municipio) |>
   dplyr::mutate(
-    joinTab = stringr::str_c(ano, codigo_municipio,
-                             sep = "_")
+    joinTab = stringr::str_c(ano, codigo_municipio,sep = "_")
   ) |> dplyr::rename(qtdeMat_escola15a17 = n)
 
 ### OBS 1: Aqui está sendo somado somente as pessoas de 15 a 17 anos que estão matriculadas no

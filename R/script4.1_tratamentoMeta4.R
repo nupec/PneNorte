@@ -121,4 +121,5 @@ matriculas_no_1222 <- purrr::map_dfr(arq_matriculas_no_1222,data.table::fread,
                                      select = (variaveis_selecionadas_1222)) |>
   dplyr::filter(NO_REGIAO == "Norte")
 
+# Salvando
 readr::write_rds(matriculas_no_1222, file = "data/matricula_att_2012_2022.rds")

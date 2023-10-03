@@ -119,12 +119,11 @@ baseMeta1 <- dplyr::left_join(baseMatricula,
     indicador1b = qtdeMatCreche/popFaixa0a3,
     indicador1a = qtdeMatPre/popFaixa4e5 #,
     # meta1 = (qtdeMatCreche + qtdeMatPre)/(popFaixa0a3+popFaixa4e5)
-  )
+)
 
 ## Salvando a base da Meta 1
 baseGeral <- dplyr::left_join(codMunicipios, baseMeta1, by = "codigo_municipio") |>
   dplyr::select(-nome_municipio.x) |>
   dplyr::rename(nome_municipio = nome_municipio.y)
-
 
 readr::write_rds(baseGeral, "data/Meta1.rds")
