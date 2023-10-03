@@ -82,8 +82,7 @@ popCrecheEst <- populacaoEst |>
   ) |>
   dplyr::group_by(codigo_municipio) |>
   dplyr::mutate(
-    joinTab = stringr::str_c(ano, codigo_municipio,
-                             sep = "_")) |>
+    joinTab = stringr::str_c(ano, codigo_municipio,sep = "_")) |>
   dplyr::relocate("joinTab",.after = "nome_municipio")
 
 ## Agrupando a população de 4 e 5 anos
@@ -91,8 +90,7 @@ popPreEst <- populacaoEst |>
   dplyr::filter(idade %in% c(4:5)) |>
   dplyr::group_by(ano, codigo_municipio, nome_municipio) |>
   dplyr::summarise(
-    popFaixa4e5 = sum(populacao_estimada)
-  ) |>
+    popFaixa4e5 = sum(populacao_estimada)) |>
   dplyr::group_by(codigo_municipio) |>
   dplyr::mutate(
     joinTab = stringr::str_c(ano, codigo_municipio,
