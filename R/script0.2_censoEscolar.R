@@ -14,23 +14,36 @@ variaveis_selecionadas_1314 <- c("ANO_CENSO",
                                  "FK_COD_ESTADO_ESCOLA",
                                  "COD_MUNICIPIO_ESCOLA",
                                  "FK_COD_MOD_ENSINO",
+                                 "FK_COD_TIPO_TURMA",
                                  "ID_POSSUI_NEC_ESPECIAL")
 
-variaveis_selecionadas_1520 <- c("NU_ANO_CENSO",
+variaveis_selecionadas_1518 <- c("NU_ANO_CENSO",
                                  "NU_IDADE_REFERENCIA",
                                  "TP_DEPENDENCIA",
                                  "TP_ETAPA_ENSINO",
                                  "CO_UF",
                                  "CO_MUNICIPIO",
                                  "IN_ESPECIAL_EXCLUSIVA",
+                                 "TP_TIPO_TURMA",
                                  "IN_NECESSIDADE_ESPECIAL")
 
-## Nesta etapa, eu aponto os caminhos das bases de dados
-arq_matriculas_no_1314 <-list.files("data-raw/2013_2014/",
-                                    full.names = T)
+variaveis_selecionadas_1920 <- c("NU_ANO_CENSO",
+                                 "NU_IDADE_REFERENCIA",
+                                 "TP_DEPENDENCIA",
+                                 "TP_ETAPA_ENSINO",
+                                 "CO_UF",
+                                 "CO_MUNICIPIO",
+                                 "IN_ESPECIAL_EXCLUSIVA",
+                                 "TP_TIPO_ATENDIMENTO_TURMA",
+                                 "IN_NECESSIDADE_ESPECIAL")
 
-arq_matriculas_no_1520 <-list.files("data-raw/2015_2020/",
-                                    full.names = T)
+
+## Nesta etapa, eu aponto os caminhos das bases de dados
+arq_matriculas_no_1314 <-list.files("data-raw/2013_2014/",full.names = T)
+
+arq_matriculas_no_1518 <-list.files("data-raw/2015_2020/",full.names = T)
+
+arq_matriculas_no_1920 <-list.files("data-raw/2019_2020/",full.names = T)
 
 ## Aqui, eu importo as Matrículas dos alunos do Norte do Brasil
 ## Eu opto pelo pacote função "fread" do pacote data.table, pela possibilidade
@@ -40,18 +53,22 @@ matriculas_no_1314 <- purrr::map_dfr(arq_matriculas_no_1314,
                                      data.table::fread,
                                      select = (variaveis_selecionadas_1314))
 
-
-matriculas_no_1520 <- purrr::map_dfr(arq_matriculas_no_1520,
+matriculas_no_1518 <- purrr::map_dfr(arq_matriculas_no_1518,
                                      data.table::fread,
-                                     select = (variaveis_selecionadas_1520))
+                                     select = (variaveis_selecionadas_1518))
+
+matriculas_no_1920 <- purrr::map_dfr(arq_matriculas_no_1920,
+                                     data.table::fread,
+                                     select = (variaveis_selecionadas_1920))
 
 ## Como as bases tem nomes diferentes nas tabelas, eu preferi usar a função colnames
 ## ao invés do mutate (que ainda não tenho muita experiência)
 
-colnames(matriculas_no_1314) <- names(matriculas_no_1520)
+colnames(matriculas_no_1314) <- names(matriculas_no_1518) <- names(matriculas_no_1920)
 
 matriculas_no_1320 <- dplyr::bind_rows(matriculas_no_1314,
-                                       matriculas_no_1520)
+                                       matriculas_no_1518,
+                                       matriculas_no_1920)
 
 readr::write_rds(matriculas_no_1320, file = "data/matricula1320.rds")
 
