@@ -26,22 +26,22 @@
 ## cod_Municipios: contém todos os códigos das divisões territoriais brasileira,
 
 # Carregando a base de dados da população com deficiencia --------------------------------------------
-populacaoComDeficiencia <- readRDS("~/GitHub/PneNorte/data/populacaoComDeficiencia.rds")
+populacaoComDeficiencia = readRDS("~/GitHub/PneNorte/data/populacaoComDeficiencia.rds")
 
 # Carregando a base de dados da população com deficiência e frequentavam a escola ou creche ----------
-popComDeficienciaFrequentaEscola <- readRDS("~/GitHub/PneNorte/data/popComDeficienciaFrequentaEscola.rds")
+popComDeficienciaFrequentaEscola = readRDS("~/GitHub/PneNorte/data/popComDeficienciaFrequentaEscola.rds")
 
 # Carregando a base de dados das matrículas atualizadas -------------------------------
-matriculaNorteAtualizada <- readr::read_rds("data/matricula_att_2012_2022.rds")
+matriculaNorteAtualizada = readr::read_rds("data/matricula_att_2012_2022.rds")
 
 # Carregando a base de dados das matrículas --------------------------------------------
-matriculaNorte <- readr::read_rds("data/matricula1320.rds")
+matriculaNorte = readr::read_rds("data/matricula1320.rds")
 
 # Carregando a base de dados dos municipios
-codMunicipios <- readxl::read_excel("data-raw/CODIGO_MUNICIPIO.xls")
+codMunicipios = readxl::read_excel("data-raw/CODIGO_MUNICIPIO.xls")
 
 # Tratando os nomes das variáveis da base: Código dos Municípios
-codMunicipios <- codMunicipios |> janitor::clean_names() |>
+codMunicipios = codMunicipios |> janitor::clean_names() |>
   dplyr::rename(co_uf = uf,
                 codigo_municipio = codigo_municipio_completo) |>
   dplyr::select(nome_regiao,nome_uf,codigo_municipio,nome_municipio) |>
@@ -49,7 +49,7 @@ codMunicipios <- codMunicipios |> janitor::clean_names() |>
     codigo_municipio = as.numeric(codigo_municipio))
 
 # Tratando os nomes das variáveis da base: MatriculaNorte
-matriculaNorte <- matriculaNorte |> janitor::clean_names() |>
+matriculaNorte = matriculaNorte |> janitor::clean_names() |>
   dplyr::rename(ano = nu_ano_censo,
                 idade = nu_idade_referencia,
                 codigo_municipio = co_municipio)
@@ -58,7 +58,7 @@ matriculaNorte <- matriculaNorte |> janitor::clean_names() |>
 
 ## Indicador 4A -----------------------------------------------------
 
-baseIndicador4a <- popComDeficienciaFrequentaEscola |>
+baseIndicador4a = popComDeficienciaFrequentaEscola |>
   dplyr::filter(sexo == "Total", nome_regiao == "Norte") |>
   dplyr::mutate(frequentavam_escola_ou_creche = as.numeric(frequentavam_escola_ou_creche),
                 não_frequentavam_escola_ou_creche = as.numeric(não_frequentavam_escola_ou_creche),
@@ -79,7 +79,7 @@ baseIndicador4a <- popComDeficienciaFrequentaEscola |>
 # Ensino médio¹ (25, 26, 27,28, 29, 30, 31, 32, 33, 34, 36, 37, 38, 39, 40, 68)
 # Educação de jovens e adultos (65, 67, 69, 70, 71, 73, 74)
 
-numeradorIndicador4b <- matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
+numeradorIndicador4b = matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
   dplyr::filter(ano %in% 2015:2020) |>
   dplyr::filter(in_necessidade_especial == 1) |>
   dplyr::filter(in_especial_exclusiva == 0) |>
@@ -88,7 +88,7 @@ numeradorIndicador4b <- matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
   dplyr::count(codigo_municipio) |> dplyr::rename(qtdeMat_4_17_cc = n) |>
   dplyr::mutate(joinTab = stringr::str_c(ano, codigo_municipio,sep = "_"))
 
-denominadorIndicador4b <- matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
+denominadorIndicador4b = matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
   dplyr::filter(ano %in% 2015:2020) |>
   dplyr::filter(in_necessidade_especial == 1) |>
   dplyr::filter(in_especial_exclusiva %in% c("0","1")) |>
@@ -98,7 +98,7 @@ denominadorIndicador4b <- matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
   dplyr::mutate(joinTab = stringr::str_c(ano, codigo_municipio,sep = "_"))
 
 # Juntando as bases acima, organizando e calculando o indicador
-baseIndicador4b <- dplyr::full_join(numeradorIndicador4b,denominadorIndicador4b,
+baseIndicador4b = dplyr::full_join(numeradorIndicador4b,denominadorIndicador4b,
                                     by = "joinTab") |>
   dplyr::rename(ano = ano.x,codigo_municipio = codigo_municipio.x) |>
   dplyr::select(-ano.y,-codigo_municipio.y,-joinTab) |>
@@ -111,7 +111,7 @@ baseIndicador4b <- dplyr::full_join(numeradorIndicador4b,denominadorIndicador4b,
 
 # Teste de agrupamento das matrículas atualizadas = Falha
 
-# numeradorIndicador4b <- matriculaNorteAtualizada |>
+# numeradorIndicador4b = matriculaNorteAtualizada |>
 #  dplyr::filter(IN_ESP_CC == 1) |>
 #  dplyr::filter(IN_ESP_CE == 0) |>
 #  dplyr::mutate(QT_MAT_BAS_4_17 = QT_MAT_BAS_4_5 + QT_MAT_BAS_6_10 +
@@ -130,7 +130,7 @@ baseIndicador4b <- dplyr::full_join(numeradorIndicador4b,denominadorIndicador4b,
 # Ensino médio¹ (25, 26, 27,28, 29, 30, 31, 32, 33, 34, 36, 37, 38, 39, 40, 68)
 # Educação de jovens e adultos (65, 67, 69, 70, 71, 73, 74)
 
-numeradorIndicador4c <- matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
+numeradorIndicador4c = matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
   dplyr::filter(ano %in% 2015:2020) |>
   dplyr::filter(in_necessidade_especial == 1) |>
   dplyr::filter(in_especial_exclusiva == 1 | tp_tipo_atendimento_turma == 4) |>
@@ -139,7 +139,7 @@ numeradorIndicador4c <- matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
   dplyr::count(codigo_municipio) |> dplyr::rename(qtdeMat_4_17_ce = n) |>
   dplyr::mutate(joinTab = stringr::str_c(ano, codigo_municipio,sep = "_"))
 
-denominadorIndicador4c <- matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
+denominadorIndicador4c = matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
   dplyr::filter(ano %in% 2015:2020) |>
   dplyr::filter(in_necessidade_especial == 1) |>
   dplyr::filter(tp_etapa_ensino %in% c("1","2","4":"11","14":"21","25":"41","65","67":"71","73","74")) |>
@@ -148,7 +148,7 @@ denominadorIndicador4c <- matriculaNorte |> dplyr::filter(idade %in% 4:17) |>
   dplyr::mutate(joinTab = stringr::str_c(ano, codigo_municipio,sep = "_"))
 
 # Juntando as bases acima, organizando e calculando o indicador 4C
-baseIndicador4c <- dplyr::full_join(numeradorIndicador4c,denominadorIndicador4c,
+baseIndicador4c = dplyr::full_join(numeradorIndicador4c,denominadorIndicador4c,
                                     by = "joinTab") |>
   dplyr::rename(ano = ano.x,codigo_municipio = codigo_municipio.x) |>
   dplyr::select(-ano.y,-codigo_municipio.y,-joinTab) |>
@@ -159,7 +159,7 @@ baseIndicador4c <- dplyr::full_join(numeradorIndicador4c,denominadorIndicador4c,
   dplyr::mutate(indicador4C = qtdeMat_4_17_ce/qtdeMat_4_17_geral) |>
   dplyr::mutate(joinTab = stringr::str_c(ano, codigo_municipio,sep = "_"))
 
-## Juntando as bases dos indicadores e salvando a base geral da meta 2
+## Juntando as bases dos indicadores e salvando a base geral da meta 4
 
 ### OBSERVAÇÃO!!! ---------------------------------------------------
 # Devido as bases utilizadas no cálculo dos indicadores 4B e 4C serem
@@ -170,7 +170,7 @@ baseIndicador4c <- dplyr::full_join(numeradorIndicador4c,denominadorIndicador4c,
 readr::write_rds(baseIndicador4a, "data/Meta4_Indicador4A.rds")
 
 # Agrupando as bases dos indicadores 4B e 4C e salvando a base
-baseMeta4 <- dplyr::left_join(baseIndicador4b,baseIndicador4c,
+baseMeta4 = dplyr::left_join(baseIndicador4b,baseIndicador4c,
                               by = "joinTab") |>
   dplyr::select(-ano.y, -codigo_municipio.y, - nome_municipio.y,
                 -nome_uf.y,-qtdeMat_4_17_geral.x,-joinTab)|>
@@ -180,7 +180,7 @@ baseMeta4 <- dplyr::left_join(baseIndicador4b,baseIndicador4c,
   dplyr::relocate(indicador4B,.after = qtdeMat_4_17_geral)
 
 # Substituindo NA's por 0
-baseMeta4[is.na(baseMeta4)] <- 0
+baseMeta4[is.na(baseMeta4)] = 0
 
 # Salvando
 readr::write_rds(baseMeta4, "data/Meta4_Indicador4B_4C.rds")

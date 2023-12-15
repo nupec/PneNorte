@@ -1,69 +1,133 @@
-# Meta 7: OFERECER EDUCAÇÃO EM TEMPO INTEGRAL EM, NO MÍNIMO,
-# 50% (CINQUENTA POR CENTO) DAS ESCOLAS PÚBLICAS, DE FORMA A
-# ATENDER, PELO MENOS, 25%(VINTE E CINCO POR CENTO) DOS (AS)
-# ALUNOS (AS) DA EDUCAÇÃO BÁSICA.
+# Meta 7: Fomentar a qualidade da educação básica em todas as etapas e
+# modalidades, com melhoria do fluxo escolar e da aprendizagem, de modo a
+# atingir as seguintes médias nacionais para o Ideb:
+#
+# Nível de Ensino                      | 2015 | 2017 | 2019 | 2021
+# Anos iniciais do ensino fundamental  | 5.2  | 5.5  | 5.7  | 6.0
+# Anos finais do ensino fundamental    | 4.7  | 5.0  | 5.2  | 5.5
+# Ensino Médio                         | 4.3  | 4.7  | 5.0  | 5.2
 
-# Indicador 7A: PERCENTUAL DE ALUNOS DA EDUCAÇÃO BÁSICA
-# PÚBLICA QUE PERTENCEM AO PÚBLICO-ALVO DA EDUCAÇÃO EM TEMPO
-# INTEGRAL (ETI) E QUE ESTÃO EM JORNADA DE TEMPO INTEGRAL
+# Indicador 7A: Ideb dos anos iniciais do ensino fundamental
 
-# Indicador 7B: PERCENTUAL DE ESCOLAS PÚBLICAS DA
-# EDUCAÇÃO BÁSICA QUE POSSUEM, PELO MENOS, 25% DOS ALUNOS
-# DO PÚBLICO-ALVO DA ETI EM JORNADA DE TEMPO INTEGRAL.
+# Indicador 7B: Ideb dos anos finais do ensino fundamental
 
-## Empilhando as bases do Censo Escolar ----------------------------------------------------
+# Indicador 7C: Ideb do ensino médio
 
-## Neste scrip, importa-se as bases do Censo Escolar que serão úteis nas
-## pesquisas futuras
+## Carregando pacotes necessários para o cálculo dos indicadores
+library(basedosdados)
+library(tidyverse)
 
-## As varáveis dos anos 2013 a 2014 possuem nomes diferentes, por isso a decisão
-## importar separadamente.
+## Carregando as base de dados necessárias para o cálculo dos indicadores
 
-## Nesta etapa, eu seleciono as variáveis equivantes nas duas base de dados
-variaveis_selecionadas_1314 <- c("ANO_CENSO",
-                                 "NUM_IDADE_REFERENCIA",
-                                 "ID_DEPENDENCIA_ADM_ESC",
-                                 "FK_COD_ETAPA_ENSINO",
-                                 "FK_COD_ESTADO_ESCOLA",
-                                 "COD_MUNICIPIO_ESCOLA",
-                                 "FK_COD_MOD_ENSINO",
-                                 "ID_POSSUI_NEC_ESPECIAL")
+# Carregando a base de dados dos municipios
+codMunicipios <- readxl::read_excel("data-raw/CODIGO_MUNICIPIO.xls")
 
-variaveis_selecionadas_1520 <- c("NU_ANO_CENSO",
-                                 "NU_IDADE_REFERENCIA",
-                                 "TP_DEPENDENCIA",
-                                 "TP_ETAPA_ENSINO",
-                                 "CO_UF",
-                                 "CO_MUNICIPIO",
-                                 "IN_ESPECIAL_EXCLUSIVA",
-                                 "IN_NECESSIDADE_ESPECIAL")
+# Tratando os nomes das variáveis da base: Código dos Municípios
+codMunicipios <- codMunicipios |> janitor::clean_names() |>
+  dplyr::rename(co_uf = uf,
+                codigo_municipio = codigo_municipio_completo) |>
+  dplyr::select(nome_regiao,nome_uf,codigo_municipio,nome_municipio) |>
+  dplyr::mutate(
+    codigo_municipio = as.numeric(codigo_municipio))
 
-## Nesta etapa, eu aponto os caminhos das bases de dados
-arq_matriculas_no_1314 <-list.files("data-raw/2013_2014/",
-                                    full.names = T)
+## Carregando e salvando como .rds a base do IDEB ------------------------------
+## Vamos utilizar a base de dados tradada pela organização Base dos Dados, pois
+## a metodologia de tratamento é compatível com a análise feita desde o princípio
 
-arq_matriculas_no_1520 <-list.files("data-raw/2015_2020/",
-                                    full.names = T)
+# install.packages("basedosdados")
+# library("basedosdados")
 
-## Aqui, eu importo as Matrículas dos alunos do Norte do Brasil
-## Eu opto pelo pacote função "fread" do pacote data.table, pela possibilidade
-## de importar apenas as variáveis de interesse.
+# Defina o seu projeto no Google Cloud
+# set_billing_id("indicadores-educacionais-ods4")
 
-matriculas_no_1314 <- purrr::map_dfr(arq_matriculas_no_1314,
-                                     data.table::fread,
-                                     select = (variaveis_selecionadas_1314))
+# Para carregar o dado direto no R
+# query <- bdplyr("br_inep_ideb.municipio")
+# df <- bd_collect(query)
+
+# Salvando a base do IDEB com níveis municipais
+# readr::write_rds(df, "data-raw/BaseIDEB.rds")
+
+# Esse procedimento foi usado apenas uma vez, faça-o caso não tenha salvo
+# a base de dados do IDEB em seu computador
+
+# Use aqui o seu diretório dentro da função readRDS("") para a pontar o caminho
+# da base de dados do IDEB que foi carregada e salva acima
+BaseIDEB <- readRDS("~/GitHub/PneNorte/data-raw/BaseIDEB.rds")
+
+## Tratamento na base geral do IDEB para filtrar apenas a região Norte e
+## nomear os municípios e estados correspondentes
+BaseIDEBNorte = BaseIDEB |>
+  dplyr::rename(codigo_municipio = id_municipio) |>
+  dplyr::mutate(codigo_municipio = as.numeric(codigo_municipio)) |>
+  dplyr::full_join(codMunicipios,BaseIDEBNorte,by="codigo_municipio") |>
+  dplyr::filter(sigla_uf == c("AM","AC","TO","PA","AP","RO","RR")) |>
+  dplyr::select(-nome_regiao,-sigla_uf) |>
+  dplyr::relocate(nome_uf,.after = "ano") |>
+  dplyr::relocate(nome_municipio,.after = "nome_uf")
+
+## OBSERVAÇÃO IMPORTANTE: Além de não haver projeção definida, há muitos
+## valores faltantes referentes às características no ano de 2005. Por esse
+## motivo decidimos retirar-lo da análise, ficando disponível os dados
+## entre os anos de 2007 e 2021
+
+## Indicador 7A -----------------------------------------------------
+
+# Vamos filtrar apenas o IDEB dos anos iniciais do ensino fundamental
+# Em seguida indicar corretamente o indicador 7A na base para salvar
+
+baseIndicador7a = BaseIDEBNorte |>
+  dplyr::filter(ano %in% "2007":"2021") |>
+  dplyr::filter(anos_escolares == "iniciais (1-5)") |>
+  dplyr::mutate(nivel_ensino = paste(ensino, anos_escolares,sep = " anos ")) |>
+  dplyr::relocate(nivel_ensino,.after = "rede") |>
+  dplyr::select(-ensino,-anos_escolares) |>
+  dplyr::rename(indicador7A = ideb,projecao_indicador7A = projecao)
+
+## Indicador 7B -----------------------------------------------------
+
+# Vamos filtrar apenas o IDEB dos anos finais do ensino fundamental
+# Em seguida indicar corretamente o indicador 7B na base para salvar
+
+baseIndicador7b = BaseIDEBNorte |>
+  dplyr::filter(ano %in% "2007":"2021") |>
+  dplyr::filter(anos_escolares == "finais (6-9)") |>
+  dplyr::mutate(nivel_ensino = paste(ensino, anos_escolares,sep = " anos ")) |>
+  dplyr::relocate(nivel_ensino,.after = "rede") |>
+  dplyr::select(-ensino,-anos_escolares) |>
+  dplyr::rename(indicador7B = ideb,projecao_indicador7B = projecao)
 
 
-matriculas_no_1520 <- purrr::map_dfr(arq_matriculas_no_1520,
-                                     data.table::fread,
-                                     select = (variaveis_selecionadas_1520))
+## Indicador 7C -----------------------------------------------------
 
-## Como as bases tem nomes diferentes nas tabelas, eu preferi usar a função colnames
-## ao invés do mutate (que ainda não tenho muita experiência)
+# Vamos filtrar apenas o IDEB dos anos finais do ensino fundamental
+# Em seguida indicar corretamente o indicador 7C na base para salvar
 
-colnames(matriculas_no_1314) <- names(matriculas_no_1520)
+baseIndicador7c = BaseIDEBNorte |>
+  dplyr::filter(ano %in% "2007":"2021") |>
+  dplyr::filter(anos_escolares == "todos (1-4)") |>
+  dplyr::mutate(ensino = case_when(
+    ensino == "medio" ~ "ensino medio",TRUE ~ ensino)) |>
+  dplyr::mutate(nivel_ensino = paste(ensino, anos_escolares,sep = " ")) |>
+  dplyr::relocate(nivel_ensino,.after = "rede") |>
+  dplyr::select(-ensino,-anos_escolares) |>
+  dplyr::rename(indicador7C = ideb,projecao_indicador7C = projecao)
 
-matriculas_no_1320 <- dplyr::bind_rows(matriculas_no_1314,
-                                       matriculas_no_1520)
+# Note que o Indicador 7A só possui valores referentes aos anos de 2017 a 2021,
+# pois, o IDEB do ensino médio só começou a ser registrado a partir de 2017 pelo
+# INEP
 
-readr::write_rds(matriculas_no_1320, file = "data/matricula1320.rds")
+## Salvando as bases dos indicadores da meta 7 -----------------------
+
+## OBSERVAÇÃO IMPORTANTE: Decidimos salvar as bases dos indicadores separadamente,
+## pois, há uma diferença significativa entre os tamanhos e características de
+## cada indicador. Portanto, para a visualização gráfica será necessário
+## carregar as bases separadamente.
+
+# Salvando a base do Indicador 7A
+readr::write_rds(baseIndicador7a, "data/Meta7_Indicador7A.rds")
+
+# Salvando a base do Indicador 7B
+readr::write_rds(baseIndicador7b, "data/Meta7_Indicador7B.rds")
+
+# Salvando a base do Indicador 7C
+readr::write_rds(baseIndicador7c, "data/Meta7_Indicador7C.rds")
