@@ -85,3 +85,6 @@ baseIndicador10a <- dplyr::full_join(numeradorIndicador10a,denominadorIndicador1
 
 # Salvando a base geral da meta 10
 readr::write_rds(baseIndicador10a, "data/Meta10.rds")
+
+# Salvando em .csv
+write.csv(baseIndicador10a, file = 'data/Meta10.csv', row.names = FALSE)

@@ -123,11 +123,21 @@ baseIndicador7c = BaseIDEBNorte |>
 ## cada indicador. Portanto, para a visualização gráfica será necessário
 ## carregar as bases separadamente.
 
-# Salvando a base do Indicador 7A
+# Salvando a base do Indicador 7A em .rds
 readr::write_rds(baseIndicador7a, "data/Meta7_Indicador7A.rds")
 
-# Salvando a base do Indicador 7B
+# Salvando a base do Indicador 7B em .rds
 readr::write_rds(baseIndicador7b, "data/Meta7_Indicador7B.rds")
 
-# Salvando a base do Indicador 7C
+# Salvando a base do Indicador 7C em .rds
 readr::write_rds(baseIndicador7c, "data/Meta7_Indicador7C.rds")
+
+# Salvando a base do Indicador 7A em .csv
+write.csv(baseIndicador7a, file = 'data/Meta7_Indicador7A.csv', row.names = FALSE)
+
+# Salvando a base do Indicador 7B em .csv
+write.csv(baseIndicador7b, file = 'data/Meta7_Indicador7B.csv', row.names = FALSE)
+
+# Salvando a base do Indicador 7C em .csv
+write.csv(baseIndicador7c, file = 'data/Meta7_Indicador7C.csv', row.names = FALSE)
+

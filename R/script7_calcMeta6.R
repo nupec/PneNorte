@@ -210,3 +210,6 @@ baseMeta6 <- dplyr::left_join(baseIndicador6a,baseIndicador6b,
 
 # Salvando a base geral da meta 06
 readr::write_rds(baseMeta6, "data/Meta6.rds")
+
+# Salvando em .csv
+write.csv(baseMeta6, file = 'data/Meta6.csv', row.names = FALSE)

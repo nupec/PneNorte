@@ -24,3 +24,10 @@ set_billing_id("indicadores-educacionais-ods4")
 query <- bdplyr("br_ibge_pnadc.microdados")
 df <- bd_collect(query)
 
+# OBS: Essa base é muito grande para ser carregada através deste pacote,
+# Vamos tentar fazer o download manualmente pelo seguinte endereço:
+# https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/LEIA-ME.pdf
+
+# Os arquivos estão em formato .txt, vamos ler com os seguintes códigos
+dadosPnadc2012 = read.table(file = "data-raw/dadosPnadc/PNADC_2012_visita1.txt",header = F,sep = ",")
+

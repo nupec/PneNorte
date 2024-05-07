@@ -156,6 +156,8 @@ baseMeta2 <- dplyr::left_join(baseindicador2B,
 
 readr::write_rds(baseMeta2, "data/Meta2.rds")
 
+write.csv(baseMeta2, file = 'data/Meta2.csv', row.names = FALSE)
+
 ### Criando um token para atualizar os scripts no github----------------------
 
 # library(usethis)

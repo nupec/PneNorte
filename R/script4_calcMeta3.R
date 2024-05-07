@@ -123,3 +123,5 @@ baseMeta3 <- dplyr::left_join(baseindicador3B,
                 popFaixa15a17 = popFaixa15a17.x)
 
 readr::write_rds(baseMeta3, "data/Meta3.rds")
+
+write.csv(baseMeta3, file = 'data/Meta3.csv', row.names = FALSE)

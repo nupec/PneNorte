@@ -61,10 +61,17 @@ matriculaNorte = matriculaNorte |> janitor::clean_names() |>
 baseIndicador4a = popComDeficienciaFrequentaEscola |>
   dplyr::filter(sexo == "Total", nome_regiao == "Norte") |>
   dplyr::mutate(frequentavam_escola_ou_creche = as.numeric(frequentavam_escola_ou_creche),
-                não_frequentavam_escola_ou_creche = as.numeric(não_frequentavam_escola_ou_creche),
-                Total = frequentavam_escola_ou_creche + não_frequentavam_escola_ou_creche) |>
+                não_frequentavam_escola_ou_creche = as.numeric(não_frequentavam_escola_ou_creche))
+
+# Eliminando os erros por conta de NA's
+baseIndicador4a = replace(baseIndicador4a, is.na(baseIndicador4a), 0)
+
+# Prosseguindo no cálculo do indicador 4A
+baseIndicador4a = baseIndicador4a |>
+  dplyr::mutate(Total = frequentavam_escola_ou_creche + não_frequentavam_escola_ou_creche) |>
   dplyr::relocate("nome_municipio",.after = "codigo_municipio") |>
-  dplyr::select(-sexo,-nome_regiao) |> dplyr::relocate("frequentavam_escola_ou_creche",.after = "nome_uf") |>
+  dplyr::select(-sexo,-nome_regiao) |>
+  dplyr::relocate("frequentavam_escola_ou_creche",.after = "nome_uf") |>
   dplyr::relocate("não_frequentavam_escola_ou_creche",.after = "frequentavam_escola_ou_creche") |>
   dplyr::mutate(indicador4A = frequentavam_escola_ou_creche/Total)
 
@@ -166,8 +173,11 @@ baseIndicador4c = dplyr::full_join(numeradorIndicador4c,denominadorIndicador4c,
 # diferentes da base utilizada no cálculo do indicador 4A, se faz
 # necessário o salvamento desses indicadores em bases separadas
 
-# Salvando a base do indicador 4A
+# Salvando a base do indicador 4A em rds
 readr::write_rds(baseIndicador4a, "data/Meta4_Indicador4A.rds")
+
+# Salvando em csv
+write.csv(baseIndicador4a, file = 'data/Meta4_Indicador4A.csv', row.names = FALSE)
 
 # Agrupando as bases dos indicadores 4B e 4C e salvando a base
 baseMeta4 = dplyr::left_join(baseIndicador4b,baseIndicador4c,
@@ -182,8 +192,11 @@ baseMeta4 = dplyr::left_join(baseIndicador4b,baseIndicador4c,
 # Substituindo NA's por 0
 baseMeta4[is.na(baseMeta4)] = 0
 
-# Salvando
+# Salvando em rds
 readr::write_rds(baseMeta4, "data/Meta4_Indicador4B_4C.rds")
+
+# Salvando em csv
+write.csv(baseMeta4, file = 'data/Meta4_Indicador4B_4C.csv', row.names = FALSE)
 
 ### OBSERVAÇÃO!!! --------------------------------------------------
 # Para o cálculo desta meta só foi possível utilizar o filtro na variável

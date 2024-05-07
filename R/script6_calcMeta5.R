@@ -126,7 +126,11 @@ meta5 <- dplyr::left_join(proficiencia_LP,proficiencia_MT,by = "joinTab") |>
                 classificacao_proficiencia_MT = classificacao_proficiencia.y) |>
   dplyr::mutate(id_municipio = as.numeric(id_municipio))
 
+# Salvando em .rds
 readr::write_rds(meta5, "data/Meta5.rds")
+
+# Salvando em .csv
+write.csv(meta5, file = 'data/Meta5.csv', row.names = FALSE)
 
 ## OBSERVAÇÃO IMPORTANTE!!!
 

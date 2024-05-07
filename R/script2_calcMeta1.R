@@ -127,3 +127,6 @@ baseGeral <- dplyr::left_join(codMunicipios, baseMeta1, by = "codigo_municipio")
   dplyr::rename(nome_municipio = nome_municipio.y)
 
 readr::write_rds(baseGeral, "data/Meta1.rds")
+# Supondo que 'dados' seja o seu data frame
+
+write.csv(baseGeral, file = 'data/Meta1.csv', row.names = FALSE)
