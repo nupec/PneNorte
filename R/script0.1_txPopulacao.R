@@ -10,7 +10,7 @@
 ## "codigo_municipio" para o formato numérico.
 
 # 1) Coeficientes populacionais das idade simples por município brasileiro, ano de referência: 2010
-indicesIdadesMunicipios <- readxl::read_excel("../data-raw/tabela1552_tidy.csv", sheet = 2) |>
+indicesIdadesMunicipios <- readxl::read_excel("data-raw/tabela1552_tidy.xlsx", sheet = 2) |>
   dplyr::mutate(
     codigo_municipio = as.numeric(codigo_municipio)
   ) |>
